@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search, Copy, Check, Bookmark, Plus, MoreHorizontal } from "lucide-react";
+import { Search, Copy, Check, Bookmark, Plus } from "lucide-react";
 import { TranscriptLine, Highlight } from "@/lib/mock-data";
 
 interface TranscriptPanelProps {
@@ -28,9 +28,10 @@ export default function TranscriptPanel({
     return `${mins}:${remainder.toString().padStart(2, "0")}`;
   };
 
-  const filteredLines = transcript.filter((line) =>
-    line.text.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    line.speakerName.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredLines = transcript.filter(
+    (line) =>
+      line.text.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      line.speakerName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const copyFullTranscript = () => {
@@ -45,40 +46,40 @@ export default function TranscriptPanel({
   const primaryHost = hostName || transcript[0]?.speakerName || "Host";
 
   return (
-    <div className="flex flex-col h-full bg-[#0E0F1A] text-white">
+    <div className="flex flex-col h-full bg-app text-text-primary">
       {/* Top action bar: Search & Copy */}
-      <div className="px-6 py-4 flex items-center justify-between gap-4 border-b border-[#1A1C2E]">
-        <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40" />
+      <div className="px-6 py-3 flex items-center justify-between gap-4 border-b border-border-subtle bg-surface">
+        <div className="relative flex-1 max-w-sm">
+          <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
           <input
             type="text"
-            placeholder="Search Transcript"
+            placeholder="Search transcript..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-[#1A1C2E] border border-[#2B2E46] rounded-full text-xs text-white placeholder-white/40 focus:outline-none focus:border-[#00A3FF] transition-all"
+            className="w-full pl-9 pr-3 py-1.5 bg-surface-elevated border border-border-muted rounded-md text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors"
           />
         </div>
 
         <button
           onClick={copyFullTranscript}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#141625] hover:bg-[#1E2138] border border-[#2B2E46] text-xs font-medium text-[#00A3FF] transition-all"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-surface-elevated hover:bg-surface-active border border-border-muted text-xs font-medium text-text-secondary hover:text-text-primary transition-colors"
         >
           {copied ? (
             <>
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-emerald-400">Copied</span>
+              <Check className="w-3.5 h-3.5 text-text-primary" />
+              <span>Copied</span>
             </>
           ) : (
             <>
-              <Copy className="w-3.5 h-3.5" />
-              <span>Copy Transcript</span>
+              <Copy className="w-3.5 h-3.5 text-text-muted" />
+              <span>Copy transcript</span>
             </>
           )}
         </button>
       </div>
 
-      {/* Transcript Chat Stream */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
+      {/* Transcript Dense Stream */}
+      <div className="flex-1 overflow-y-auto p-6 space-y-4">
         {filteredLines.map((line, idx) => {
           const isHost = line.speakerName === primaryHost;
           const isCurrent =
@@ -92,82 +93,44 @@ export default function TranscriptPanel({
           );
 
           return (
-            <div key={line.id} className="space-y-2">
+            <div key={line.id} className="space-y-1.5">
               {/* Inline Bookmark banner if highlight matches */}
               {matchedHighlight && idx % 4 === 1 && (
                 <div
                   onClick={() => onSeek(matchedHighlight.timestampSeconds)}
-                  className="my-3 py-2 px-3 rounded-lg bg-[#161B2E] border border-[#00A3FF]/30 flex items-center gap-2 cursor-pointer hover:bg-[#1A223B] transition-colors"
+                  className="my-2 py-1.5 px-3 rounded-md bg-surface-elevated border border-border-muted flex items-center gap-2 cursor-pointer hover:border-border-strong transition-colors text-xs"
                 >
-                  <Bookmark className="w-3.5 h-3.5 text-[#00A3FF] fill-current" />
-                  <span className="text-xs font-semibold text-[#00A3FF]">BOOKMARK</span>
-                  <span className="text-xs text-white/60">...</span>
-                  <span className="text-xs text-white/90 font-medium">
-                    {matchedHighlight.quoteText.slice(0, 60)}...
+                  <Bookmark className="w-3.5 h-3.5 text-text-muted shrink-0" />
+                  <span className="font-medium text-text-primary">Bookmark:</span>
+                  <span className="text-text-secondary truncate">
+                    {matchedHighlight.quoteText}
                   </span>
-                  <span className="text-[11px] text-white/40 ml-auto font-mono">
+                  <span className="text-[11px] font-mono text-text-muted ml-auto shrink-0">
                     @{formatTime(matchedHighlight.timestampSeconds)}
                   </span>
                 </div>
               )}
 
-              {/* Speaker Bubble Container */}
+              {/* Speaker Row Container */}
               <div
-                className={`flex flex-col group ${
-                  isHost ? "items-end" : "items-start"
+                onClick={() => onSeek(line.timestampSeconds)}
+                className={`p-3 rounded-md border transition-colors cursor-pointer group ${
+                  isCurrent
+                    ? "bg-surface-elevated border-accent text-text-primary"
+                    : "bg-surface border-border-subtle hover:border-border-muted text-text-secondary"
                 }`}
               >
-                {/* Speaker Label */}
-                <div
-                  className={`flex items-center gap-2 mb-1 px-1 text-[12px] font-medium text-white/60 ${
-                    isHost ? "flex-row-reverse" : "flex-row"
-                  }`}
-                >
-                  <span className="hover:text-white transition-colors">
-                    {line.speakerName}
+                <div className="flex items-center justify-between text-xs mb-1">
+                  <span className={`font-medium ${isCurrent ? "text-text-primary" : "text-text-secondary"}`}>
+                    {line.speakerName} {isHost ? "(Host)" : ""}
                   </span>
-                  <span className="text-[11px] font-mono text-white/30">
+                  <span className="font-mono text-[11px] text-text-muted">
                     {formatTime(line.timestampSeconds)}
                   </span>
                 </div>
 
-                {/* Bubble with hover actions */}
-                <div
-                  className={`relative flex items-center gap-2 max-w-[80%] ${
-                    isHost ? "flex-row-reverse" : "flex-row"
-                  }`}
-                >
-                  <div
-                    onClick={() => onSeek(line.timestampSeconds)}
-                    className={`p-3.5 rounded-2xl text-[13.5px] leading-relaxed cursor-pointer transition-all duration-200 ${
-                      isHost
-                        ? "bg-[#202336] hover:bg-[#272B42] text-white/95 rounded-tr-sm"
-                        : "bg-[#181A2B] hover:bg-[#202238] text-white/90 rounded-tl-sm border border-[#252840]"
-                    } ${
-                      isCurrent
-                        ? "ring-2 ring-[#00A3FF] shadow-lg shadow-[#00A3FF]/10"
-                        : ""
-                    }`}
-                  >
-                    {line.text}
-                  </div>
-
-                  {/* Hover tool buttons */}
-                  <div className="opacity-0 group-hover:opacity-100 flex items-center gap-1 transition-opacity">
-                    <button
-                      onClick={() => onSeek(line.timestampSeconds)}
-                      title="Bookmark moment"
-                      className="p-1 rounded-full text-white/40 hover:text-[#00A3FF] hover:bg-white/10 transition-colors"
-                    >
-                      <Plus className="w-4 h-4" />
-                    </button>
-                    <button
-                      title="More options"
-                      className="p-1 rounded-full text-white/40 hover:text-white hover:bg-white/10 transition-colors"
-                    >
-                      <MoreHorizontal className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
+                <div className="text-xs leading-normal text-text-primary">
+                  {line.text}
                 </div>
               </div>
             </div>

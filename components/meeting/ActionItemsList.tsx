@@ -51,76 +51,74 @@ export default function ActionItemsList({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* Section Header */}
       <div className="flex items-center justify-between">
-        <h4 className="text-[11px] font-bold uppercase tracking-wider text-white/50">
-          Action Items
+        <h4 className="text-xs font-semibold text-text-secondary">
+          Action items
         </h4>
-        <span className="text-[11px] font-mono text-white/40">
+        <span className="text-[11px] font-mono text-text-muted">
           {items.filter((i) => i.isDone).length}/{items.length} done
         </span>
       </div>
 
-      {/* Primary Action Button from Screenshot */}
+      {/* Extract Button: clean secondary outline */}
       <button
         onClick={handleExtract}
         disabled={isExtracting}
-        className="w-full py-2.5 px-4 rounded-xl bg-[#00A3FF]/10 hover:bg-[#00A3FF]/20 border border-[#00A3FF]/30 hover:border-[#00A3FF]/60 text-xs font-semibold text-[#00A3FF] flex items-center justify-center gap-2 transition-all duration-150 group shadow-sm"
+        className="w-full py-1.5 px-3 rounded-md bg-surface-elevated hover:bg-surface-active border border-border-muted text-xs font-medium text-text-primary flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
       >
-        <Bot className="w-4 h-4 text-[#00A3FF] group-hover:scale-110 transition-transform" />
+        <Bot className="w-3.5 h-3.5 text-text-muted" />
         <span>
-          {isExtracting
-            ? "Extracting new items..."
-            : "Extract Action Items from Transcript"}
+          {isExtracting ? "Extracting..." : "Re-extract from transcript"}
         </span>
       </button>
 
       {/* Interactive Items List */}
-      <div className="space-y-2.5">
+      <div className="space-y-2">
         {items.map((item) => (
           <div
             key={item.id}
             onClick={() => toggleDone(item.id)}
-            className={`p-3 rounded-xl border transition-all cursor-pointer flex items-start gap-3 group ${
+            className={`p-2.5 rounded-md border transition-colors cursor-pointer flex items-start gap-2.5 ${
               item.isDone
-                ? "bg-[#10121F]/60 border-[#1C1F33] opacity-60"
-                : "bg-[#141625] border-[#22253B] hover:border-[#343859] hover:bg-[#181B2E]"
+                ? "bg-surface-elevated border-border-subtle opacity-60"
+                : "bg-surface border-border-muted hover:border-border-strong"
             }`}
           >
-            {/* Custom Checkbox matching Fathom */}
+            {/* Custom Checkbox */}
             <div
-              className={`w-4 h-4 rounded-md border flex items-center justify-center shrink-0 mt-0.5 transition-all ${
+              className={`w-3.5 h-3.5 rounded-sm border flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
                 item.isDone
-                  ? "bg-emerald-500 border-emerald-500 text-white"
-                  : "border-[#3A3E60] group-hover:border-[#00A3FF] bg-[#0E101D]"
+                  ? "bg-accent border-accent text-white"
+                  : "border-border-strong bg-surface"
               }`}
             >
-              {item.isDone && <Check className="w-3 h-3 stroke-[3]" />}
+              {item.isDone && <Check className="w-2.5 h-2.5 stroke-[2.5]" />}
             </div>
 
             {/* Content & Metadata */}
             <div className="flex-1 min-w-0">
               <p
-                className={`text-xs leading-relaxed transition-all ${
+                className={`text-xs leading-normal transition-colors ${
                   item.isDone
-                    ? "line-through text-white/40"
-                    : "text-white/90 group-hover:text-white"
+                    ? "line-through text-text-muted"
+                    : "text-text-primary"
                 }`}
               >
                 {item.text}
               </p>
 
               {(item.assignee || item.dueDate) && (
-                <div className="flex items-center gap-2 mt-2">
+                <div className="flex items-center gap-2 mt-1.5 text-[11px] font-mono text-text-muted">
                   {item.assignee && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-[#1F2338] text-white/70 border border-[#2F3452]">
-                      <UserIcon className="w-2.5 h-2.5 text-[#00A3FF]" />
+                    <span className="inline-flex items-center gap-1">
+                      <UserIcon className="w-2.5 h-2.5" />
                       {item.assignee}
                     </span>
                   )}
                   {item.dueDate && (
-                    <span className="inline-flex items-center gap-1 text-[10px] text-white/40 font-mono">
+                    <span className="inline-flex items-center gap-1">
                       <Calendar className="w-2.5 h-2.5" />
                       {item.dueDate}
                     </span>
@@ -132,27 +130,27 @@ export default function ActionItemsList({
         ))}
       </div>
 
-      {/* Add new action item toggle */}
+      {/* Add new action item */}
       {isAdding ? (
         <form onSubmit={handleAddItem} className="flex gap-2 pt-1">
           <input
             type="text"
-            placeholder="Add new task..."
+            placeholder="Add new action item..."
             value={newItemText}
             onChange={(e) => setNewItemText(e.target.value)}
             autoFocus
-            className="flex-1 px-3 py-1.5 bg-[#141625] border border-[#2F3452] rounded-lg text-xs text-white placeholder-white/40 focus:outline-none focus:border-[#00A3FF]"
+            className="flex-1 px-2.5 py-1 bg-surface-elevated border border-border-muted rounded-md text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent"
           />
           <button
             type="submit"
-            className="px-3 py-1.5 bg-[#00A3FF] text-white text-xs font-semibold rounded-lg hover:bg-[#0092E6]"
+            className="px-3 py-1 bg-accent hover:bg-accent-hover text-white text-xs font-medium rounded-md transition-colors"
           >
             Add
           </button>
           <button
             type="button"
             onClick={() => setIsAdding(false)}
-            className="px-2 py-1.5 text-xs text-white/50 hover:text-white"
+            className="px-2 py-1 text-xs text-text-muted hover:text-text-primary transition-colors"
           >
             Cancel
           </button>
@@ -160,10 +158,10 @@ export default function ActionItemsList({
       ) : (
         <button
           onClick={() => setIsAdding(true)}
-          className="flex items-center gap-1.5 text-[11px] font-medium text-white/40 hover:text-[#00A3FF] transition-colors pt-1"
+          className="flex items-center gap-1.5 text-xs font-normal text-text-muted hover:text-text-primary transition-colors pt-1"
         >
           <Plus className="w-3.5 h-3.5" />
-          <span>Add Action Item</span>
+          <span>Add action item</span>
         </button>
       )}
     </div>

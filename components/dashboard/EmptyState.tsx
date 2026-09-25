@@ -10,16 +10,16 @@ interface EmptyStateProps {
 
 export default function EmptyState({ searchQuery, onClear }: EmptyStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center p-12 text-center max-w-sm mx-auto space-y-4">
-      <div className="w-14 h-14 rounded-2xl bg-[#141624] border border-[#252840] flex items-center justify-center text-white/40">
-        <SearchX className="w-6 h-6 text-white/50" />
+    <div className="flex flex-col items-center justify-center p-12 text-center max-w-sm mx-auto space-y-3">
+      <div className="w-10 h-10 rounded-md bg-surface border border-border-muted flex items-center justify-center text-text-muted">
+        <SearchX className="w-5 h-5" />
       </div>
 
       <div className="space-y-1">
-        <h3 className="text-sm font-bold text-white">No meetings found</h3>
-        <p className="text-xs text-white/50">
+        <h3 className="text-xs font-semibold text-text-primary">No meetings found</h3>
+        <p className="text-xs text-text-secondary">
           {searchQuery
-            ? `We couldn't find any recordings matching "${searchQuery}".`
+            ? `No recordings matched "${searchQuery}".`
             : "No meetings recorded in this view yet."}
         </p>
       </div>
@@ -27,7 +27,7 @@ export default function EmptyState({ searchQuery, onClear }: EmptyStateProps) {
       {searchQuery && onClear && (
         <button
           onClick={onClear}
-          className="px-3.5 py-1.5 rounded-lg bg-[#181B2C] hover:bg-[#20253D] border border-[#2C3150] text-xs font-medium text-[#00A3FF] transition-all"
+          className="px-3 py-1.5 rounded-md bg-surface border border-border-muted hover:bg-surface-elevated text-xs font-medium text-text-primary transition-colors"
         >
           Clear search filter
         </button>

@@ -2,14 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import {
-  Search,
-  Gift,
-  Settings,
-  HelpCircle,
-  Sparkles,
-  Coins,
-} from "lucide-react";
+import { Search, Settings, HelpCircle, User } from "lucide-react";
 
 interface TopNavProps {
   searchQuery: string;
@@ -25,92 +18,74 @@ export default function TopNav({
   onTabChange,
 }: TopNavProps) {
   const tabs = [
-    { id: "my-calls", label: "My Calls", active: true },
-    { id: "team-calls", label: "Team Calls" },
+    { id: "my-calls", label: "My calls" },
+    { id: "team-calls", label: "Team calls" },
     { id: "playlists", label: "Playlists" },
     { id: "alerts", label: "Alerts" },
-    { id: "deals", label: "Deals" },
   ];
 
   return (
-    <header className="bg-[#0B0C15] border-b border-[#1A1C2C] text-white shrink-0 select-none">
+    <header className="bg-surface border-b border-border-subtle text-text-primary shrink-0 select-none">
       {/* Upper Navigation Bar */}
       <div className="h-14 px-6 flex items-center justify-between gap-6">
         {/* Left: Brand Logo & Search */}
-        <div className="flex items-center gap-6 flex-1 max-w-xl">
-          <Link href="/dashboard" className="flex items-center gap-2 group shrink-0">
-            <span className="text-lg font-black tracking-wider text-white">
+        <div className="flex items-center gap-6 flex-1 max-w-lg">
+          <Link href="/dashboard" className="flex items-center gap-2 shrink-0">
+            <span className="text-sm font-bold tracking-tight text-text-primary">
               FATHOM
             </span>
-            <div className="flex items-center -space-x-1">
-              <span className="w-1.5 h-4 bg-[#00A3FF] rounded-sm -skew-x-12" />
-              <span className="w-1.5 h-4 bg-[#00D2FF] rounded-sm -skew-x-12 opacity-80" />
-            </div>
+            <span className="w-1.5 h-3 bg-accent rounded-xs" />
           </Link>
 
           {/* Search Input */}
           <div className="relative w-full">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40" />
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
             <input
               type="text"
-              placeholder="Search Call Recordings"
+              placeholder="Search call recordings..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-[#161829] border border-[#252840] rounded-lg text-xs text-white placeholder-white/40 focus:outline-none focus:border-[#00A3FF] transition-all"
+              className="w-full pl-9 pr-3 py-1.5 bg-surface-elevated border border-border-muted rounded-md text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors"
             />
           </div>
         </div>
 
         {/* Right: Actions & User Avatar */}
-        <div className="flex items-center gap-4 text-xs font-medium text-white/70">
-          <button className="flex items-center gap-1.5 hover:text-white transition-colors">
-            <Gift className="w-4 h-4 text-white/50" />
-            <span>Refer</span>
-          </button>
-
-          <button className="flex items-center gap-1.5 hover:text-white transition-colors">
-            <Settings className="w-4 h-4 text-white/50" />
+        <div className="flex items-center gap-4 text-xs font-normal text-text-secondary">
+          <button className="flex items-center gap-1.5 hover:text-text-primary transition-colors">
+            <Settings className="w-3.5 h-3.5 text-text-muted" />
             <span>Settings</span>
           </button>
 
-          <button className="flex items-center gap-1.5 hover:text-white transition-colors">
-            <HelpCircle className="w-4 h-4 text-white/50" />
-            <span>Help & Feedback</span>
+          <button className="flex items-center gap-1.5 hover:text-text-primary transition-colors">
+            <HelpCircle className="w-3.5 h-3.5 text-text-muted" />
+            <span>Help</span>
           </button>
 
-          {/* Points Pill from Screenshot */}
-          <div className="flex items-center gap-1.5 bg-[#1F1E16] border border-amber-500/30 px-2 py-1 rounded-full text-amber-400">
-            <Coins className="w-3.5 h-3.5 fill-amber-400" />
-            <span className="font-bold text-[11px]">30</span>
-            <span className="text-[9px] font-bold uppercase bg-amber-400 text-black px-1.5 py-0.5 rounded-full tracking-wider ml-1">
-              +5 POINTS
-            </span>
-          </div>
-
           {/* User Profile Avatar */}
-          <div className="w-7 h-7 rounded-full bg-[#1F2338] border border-[#2D3352] flex items-center justify-center font-bold text-xs text-white">
+          <div className="w-7 h-7 rounded-md bg-surface-elevated border border-border-muted flex items-center justify-center font-medium text-xs text-text-primary">
             H
           </div>
         </div>
       </div>
 
-      {/* Lower Tab Row (My Calls, Team Calls, etc.) */}
-      <div className="px-6 flex items-center gap-8 text-xs font-semibold border-t border-[#141624]">
+      {/* Lower Tab Row */}
+      <div className="px-6 flex items-center gap-6 text-xs font-medium border-t border-border-subtle">
         {tabs.map((tab) => {
           const isSelected = activeTab === tab.id;
           return (
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`py-3 relative transition-colors ${
+              className={`py-2.5 relative transition-colors ${
                 isSelected
-                  ? "text-white"
-                  : "text-white/50 hover:text-white/80"
+                  ? "text-text-primary"
+                  : "text-text-secondary hover:text-text-primary"
               }`}
             >
               {tab.label}
               {isSelected && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00A3FF]" />
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent" />
               )}
             </button>
           );

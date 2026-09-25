@@ -11,7 +11,7 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState("my-calls");
 
   return (
-    <div className="h-screen w-screen bg-[#07080F] text-white flex flex-col overflow-hidden font-sans select-none">
+    <div className="h-screen w-screen bg-app text-text-primary flex flex-col overflow-hidden font-sans select-none">
       {/* Top Navigation Bar with Search and Tab row */}
       <TopNav
         searchQuery={searchQuery}
@@ -22,8 +22,8 @@ export default function DashboardPage() {
 
       {/* Main Two-Column Viewport */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Left / Main Column (~70% width): Scrollable Meeting Grid */}
-        <main className="flex-[70] h-full overflow-y-auto p-6 md:p-8 bg-[#0B0C15]">
+        {/* Left / Main Column: Scrollable Meeting Grid */}
+        <main className="flex-[70] h-full overflow-y-auto p-6 md:p-8 bg-app">
           <MeetingCardGrid
             meetings={mockMeetings}
             searchQuery={searchQuery}
@@ -31,8 +31,8 @@ export default function DashboardPage() {
           />
         </main>
 
-        {/* Right Column (~30% width, Sticky/Persistent): Ask Fanthom Panel */}
-        <aside className="flex-[30] min-w-[320px] max-w-[420px] h-full overflow-hidden flex flex-col shrink-0">
+        {/* Right Column: Persistent Ask Fanthom Panel */}
+        <aside className="flex-[30] min-w-[320px] max-w-[400px] h-full overflow-hidden flex flex-col shrink-0 border-l border-border-subtle bg-surface">
           <AskPanel />
         </aside>
       </div>

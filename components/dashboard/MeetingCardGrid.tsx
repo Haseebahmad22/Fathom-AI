@@ -52,14 +52,12 @@ export default function MeetingCardGrid({
   return (
     <div className="space-y-8">
       {Object.entries(grouped).map(([monthYear, groupMeetings]) => (
-        <div key={monthYear} className="space-y-4">
-          {/* Month/Date Heading (matching screenshot e.g. "September 2021" / "September 2026") */}
-          <h2 className="text-sm font-bold tracking-tight text-white/90">
+        <div key={monthYear} className="space-y-3">
+          <h2 className="text-xs font-semibold text-text-secondary uppercase tracking-wider">
             {monthYear}
           </h2>
 
-          {/* Horizontal-wrap grid of cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
             {groupMeetings.map((meeting) => (
               <MeetingCard key={meeting.id} meeting={meeting} />
             ))}

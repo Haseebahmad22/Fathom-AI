@@ -2,29 +2,48 @@
 @config "../tailwind.config.ts";
 
 :root {
-  /* Marketing / landing tokens (Section 5.2) */
-  --bg-space: #0E0F1A;
-  --bg-space-2: #1A1C2E;
-  --accent-indigo: #4E46DC;
-  --accent-indigo-light: #8B85F5;
-  --accent-coral: #FF6B5B;
-  --text-on-dark: #F5F5FA;
-  --text-on-dark-muted: #A6A6C1;
+  /* True dark background and flat panels */
+  --bg-app: #0A0B0E;
+  --bg-surface: #111318;
+  --bg-surface-elevated: #171922;
+  --bg-surface-active: #1E202B;
 
-  /* App / product UI tokens (Section 5.2) */
-  --bg-app: #FFFFFF;
-  --bg-app-subtle: #F7F7FB;
-  --border-subtle: #E7E7EF;
-  --text-primary: #171725;
-  --text-secondary: #6B6B80;
-  --accent-indigo-subtle: #EEEDFC;
-  --success: #1FA97A;
-  --warning: #F5A623;
-  --danger: #E8544E;
+  /* Hairline 1px border tokens */
+  --border-subtle: #191B24;
+  --border-muted: #222532;
+  --border-strong: #313545;
+
+  /* Typography color hierarchy */
+  --text-primary: #F3F4F6;
+  --text-secondary: #9295A5;
+  --text-muted: #5D6071;
+
+  /* Exactly ONE accent color (utilitarian indigo) */
+  --accent: #4E46DC;
+  --accent-hover: #433BC9;
+  --accent-subtle: rgba(78, 70, 220, 0.12);
+  --accent-text: #837DF0;
+
+  /* Radii scale: 6px for small elements, 8px for containers */
+  --radius-sm: 6px;
+  --radius-lg: 8px;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color: var(--text-primary);
-  background: var(--bg-app);
+  background-color: var(--bg-app);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Remove default focus ring glows and use sharp borders */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 0;
 }
