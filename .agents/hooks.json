@@ -1,0 +1,18 @@
+{
+  "agent-capture-log": {
+    "PostInvocation": [
+      {
+        "type": "command",
+        "command": "C:\\Users\\dell\\AppData\\Local\\Programs\\Python\\Python313\\python.exe c:\\Users\\dell\\Desktop\\FathomAi\\.agents\\scripts\\capture_logs.py --stdin",
+        "timeout": 30
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": "C:\\Users\\dell\\AppData\\Local\\Programs\\Python\\Python313\\python.exe c:\\Users\\dell\\Desktop\\FathomAi\\.agents\\scripts\\capture_logs.py --stdin",
+        "timeout": 30
+      }
+    ]
+  }
+}

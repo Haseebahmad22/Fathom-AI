@@ -1,0 +1,30 @@
+@import "tailwindcss";
+@config "../tailwind.config.ts";
+
+:root {
+  /* Marketing / landing tokens (Section 5.2) */
+  --bg-space: #0E0F1A;
+  --bg-space-2: #1A1C2E;
+  --accent-indigo: #4E46DC;
+  --accent-indigo-light: #8B85F5;
+  --accent-coral: #FF6B5B;
+  --text-on-dark: #F5F5FA;
+  --text-on-dark-muted: #A6A6C1;
+
+  /* App / product UI tokens (Section 5.2) */
+  --bg-app: #FFFFFF;
+  --bg-app-subtle: #F7F7FB;
+  --border-subtle: #E7E7EF;
+  --text-primary: #171725;
+  --text-secondary: #6B6B80;
+  --accent-indigo-subtle: #EEEDFC;
+  --success: #1FA97A;
+  --warning: #F5A623;
+  --danger: #E8544E;
+}
+
+body {
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--text-primary);
+  background: var(--bg-app);
+}
