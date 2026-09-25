@@ -2,14 +2,25 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import DashboardClient from "./DashboardClient";
 
-export default async function DashboardPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
+export const dynamic = "force-dynamic";
 
-  if (error || !user) {
+export default async function DashboardPage() {
+  let user = null;
+
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase.auth.getUser();
+    if (!error && data?.user) {
+      user = data.user;
+    }
+  } catch (err: unknown) {
+    if (typeof err === "object" && err !== null && "digest" in err && (err as { digest: string }).digest === "DYNAMIC_SERVER_USAGE") {
+      throw err;
+    }
+    console.error("Dashboard auth check error:", err);
+  }
+
+  if (!user) {
     redirect("/login");
   }
 
