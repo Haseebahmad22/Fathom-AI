@@ -2,9 +2,17 @@
 
 import React from "react";
 import Link from "next/link";
-import { Search, Settings, HelpCircle, User } from "lucide-react";
+import { Search, Settings, HelpCircle, LogOut } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
+
+export interface UserProfile {
+  name: string;
+  email: string;
+  avatarUrl?: string;
+}
 
 interface TopNavProps {
+  user?: UserProfile;
   searchQuery: string;
   onSearchChange: (query: string) => void;
   activeTab: string;
@@ -12,6 +20,7 @@ interface TopNavProps {
 }
 
 export default function TopNav({
+  user,
   searchQuery,
   onSearchChange,
   activeTab,
@@ -23,6 +32,14 @@ export default function TopNav({
     { id: "playlists", label: "Playlists" },
     { id: "alerts", label: "Alerts" },
   ];
+
+  const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    window.location.href = "/";
+  };
+
+  const initial = user?.name ? user.name[0].toUpperCase() : "U";
 
   return (
     <header className="bg-surface border-b border-border-subtle text-text-primary shrink-0 select-none">
@@ -50,21 +67,40 @@ export default function TopNav({
           </div>
         </div>
 
-        {/* Right: Actions & User Avatar */}
+        {/* Right: Actions, Log Out & User Profile */}
         <div className="flex items-center gap-4 text-xs font-normal text-text-secondary">
-          <button className="flex items-center gap-1.5 hover:text-text-primary transition-colors">
-            <Settings className="w-3.5 h-3.5 text-text-muted" />
-            <span>Settings</span>
-          </button>
-
-          <button className="flex items-center gap-1.5 hover:text-text-primary transition-colors">
+          <button className="hidden md:flex items-center gap-1.5 hover:text-text-primary transition-colors">
             <HelpCircle className="w-3.5 h-3.5 text-text-muted" />
             <span>Help</span>
           </button>
 
-          {/* User Profile Avatar */}
-          <div className="w-7 h-7 rounded-md bg-surface-elevated border border-border-muted flex items-center justify-center font-medium text-xs text-text-primary">
-            H
+          <button
+            onClick={handleSignOut}
+            className="flex items-center gap-1.5 hover:text-text-primary transition-colors text-xs cursor-pointer"
+            title="Log out"
+          >
+            <LogOut className="w-3.5 h-3.5 text-text-muted" />
+            <span>Log out</span>
+          </button>
+
+          {/* User Profile Avatar & Name */}
+          <div className="flex items-center gap-2 pl-2 border-l border-border-subtle">
+            {user?.avatarUrl ? (
+              <img
+                src={user.avatarUrl}
+                alt={user.name}
+                className="w-7 h-7 rounded-md object-cover border border-border-muted"
+              />
+            ) : (
+              <div className="w-7 h-7 rounded-md bg-surface-elevated border border-border-muted flex items-center justify-center font-medium text-xs text-text-primary">
+                {initial}
+              </div>
+            )}
+            {user?.name && (
+              <span className="text-xs text-text-secondary font-medium hidden sm:inline truncate max-w-[120px]">
+                {user.name}
+              </span>
+            )}
           </div>
         </div>
       </div>
