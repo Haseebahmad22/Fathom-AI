@@ -9,12 +9,14 @@ interface MeetingCardGridProps {
   meetings: Meeting[];
   searchQuery: string;
   onClearSearch: () => void;
+  onDeleteMeeting?: (meetingId: string) => void;
 }
 
 export default function MeetingCardGrid({
   meetings,
   searchQuery,
   onClearSearch,
+  onDeleteMeeting,
 }: MeetingCardGridProps) {
   // Filter by search query
   const filteredMeetings = meetings.filter((m) => {
@@ -65,7 +67,11 @@ export default function MeetingCardGrid({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {groupMeetings.map((meeting) => (
-              <MeetingCard key={meeting.id} meeting={meeting} />
+              <MeetingCard
+                key={meeting.id}
+                meeting={meeting}
+                onDelete={onDeleteMeeting}
+              />
             ))}
           </div>
         </div>

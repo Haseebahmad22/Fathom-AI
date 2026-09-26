@@ -17,10 +17,17 @@ import {
   Film,
   Sparkles,
   Volume2,
+  Edit2,
+  Share2,
+  ChevronUp,
+  ChevronDown,
+  Save,
+  Link as LinkIcon,
 } from "lucide-react";
 import {
   Playlist,
   getStoredPlaylists,
+  saveStoredPlaylist,
   mockMeetings,
   Highlight,
   Meeting,
@@ -47,11 +54,19 @@ export default function PlaylistDetailClient({
   const [activeClipIndex, setActiveClipIndex] = useState<number | null>(null);
   const [playProgress, setPlayProgress] = useState(0);
 
+  // Edit & Share state
+  const [isEditing, setIsEditing] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [editDesc, setEditDesc] = useState("");
+  const [copiedLink, setCopiedLink] = useState(false);
+
   useEffect(() => {
     const allPlaylists = getStoredPlaylists();
     const found = allPlaylists.find((p) => p.id === playlistId);
     if (found) {
       setPlaylist(found);
+      setEditName(found.name);
+      setEditDesc(found.description || "");
       const clips: ResolvedClip[] = [];
       for (const ref of found.highlightRefs) {
         const meeting = mockMeetings.find((m) => m.id === ref.meetingId);
@@ -63,6 +78,52 @@ export default function PlaylistDetailClient({
       setResolvedClips(clips);
     }
   }, [playlistId]);
+
+  const handleSaveEdit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!playlist || !editName.trim()) return;
+    const updated: Playlist = {
+      ...playlist,
+      name: editName.trim(),
+      description: editDesc.trim() || undefined,
+    };
+    saveStoredPlaylist(updated);
+    setPlaylist(updated);
+    setIsEditing(false);
+  };
+
+  const handleSharePlaylist = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 2000);
+  };
+
+  const handleMoveClip = (index: number, direction: "up" | "down") => {
+    if (!playlist) return;
+    const targetIdx = direction === "up" ? index - 1 : index + 1;
+    if (targetIdx < 0 || targetIdx >= playlist.highlightRefs.length) return;
+
+    const newRefs = [...playlist.highlightRefs];
+    const tempRef = newRefs[index];
+    newRefs[index] = newRefs[targetIdx];
+    newRefs[targetIdx] = tempRef;
+
+    const newClips = [...resolvedClips];
+    const tempClip = newClips[index];
+    newClips[index] = newClips[targetIdx];
+    newClips[targetIdx] = tempClip;
+
+    const updated = { ...playlist, highlightRefs: newRefs };
+    saveStoredPlaylist(updated);
+    setPlaylist(updated);
+    setResolvedClips(newClips);
+
+    if (activeClipIndex === index) {
+      setActiveClipIndex(targetIdx);
+    } else if (activeClipIndex === targetIdx) {
+      setActiveClipIndex(index);
+    }
+  };
 
   // Sequential Play All simulation timer
   useEffect(() => {
@@ -203,43 +264,109 @@ export default function PlaylistDetailClient({
           {/* Header Card */}
           <div className="p-6 rounded-2xl bg-[#0A0C12] border border-[#1A1D2E] space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-2.5">
-                  <h1 className="text-2xl font-bold text-white tracking-tight">
-                    {playlist.name}
-                  </h1>
-                  <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold text-[#00E5FF] bg-[#00E5FF]/10 border border-[#00E5FF]/20">
-                    {resolvedClips.length}{" "}
-                    {resolvedClips.length === 1 ? "Clip" : "Clips"}
-                  </span>
-                </div>
+              <div className="flex-1 min-w-0">
+                {isEditing ? (
+                  <form onSubmit={handleSaveEdit} className="space-y-2 max-w-xl">
+                    <input
+                      type="text"
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                      placeholder="Playlist name"
+                      autoFocus
+                      required
+                      className="w-full px-3 py-1.5 bg-[#12141D] border border-[#00E5FF]/40 rounded-xl text-base font-bold text-white focus:outline-none"
+                    />
+                    <textarea
+                      rows={2}
+                      value={editDesc}
+                      onChange={(e) => setEditDesc(e.target.value)}
+                      placeholder="Playlist description"
+                      className="w-full px-3 py-1.5 bg-[#12141D] border border-[#1E2030] rounded-xl text-xs text-white placeholder-[#555869] focus:outline-none resize-none"
+                    />
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setIsEditing(false)}
+                        className="px-3 py-1 text-xs text-[#8E92A6] hover:text-white cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="px-3.5 py-1 rounded-lg bg-[#00E5FF] text-[#050608] font-semibold text-xs flex items-center gap-1 shadow-sm shadow-[#00E5FF]/20 cursor-pointer"
+                      >
+                        <Save className="w-3 h-3" />
+                        <span>Save Changes</span>
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <div>
+                    <div className="flex items-center gap-2.5">
+                      <h1 className="text-2xl font-bold text-white tracking-tight truncate">
+                        {playlist.name}
+                      </h1>
+                      <button
+                        onClick={() => setIsEditing(true)}
+                        className="p-1 rounded-md text-[#555869] hover:text-white hover:bg-[#12141D] transition-colors cursor-pointer"
+                        title="Edit title & description"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                      </button>
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold text-[#00E5FF] bg-[#00E5FF]/10 border border-[#00E5FF]/20 shrink-0">
+                        {resolvedClips.length}{" "}
+                        {resolvedClips.length === 1 ? "Clip" : "Clips"}
+                      </span>
+                    </div>
 
-                {playlist.description && (
-                  <p className="text-sm text-[#8E92A6] mt-1.5 leading-relaxed max-w-2xl">
-                    {playlist.description}
-                  </p>
+                    {playlist.description && (
+                      <p className="text-sm text-[#8E92A6] mt-1.5 leading-relaxed max-w-2xl">
+                        {playlist.description}
+                      </p>
+                    )}
+                  </div>
                 )}
               </div>
 
-              {/* Play All Button */}
-              {resolvedClips.length > 0 && (
+              {/* Actions: Share & Play All Buttons */}
+              <div className="flex items-center gap-2">
                 <button
-                  onClick={handleStartPlayAll}
-                  className="py-2.5 px-5 rounded-xl bg-[#00E5FF] hover:bg-[#38EDFF] text-[#050608] font-semibold text-xs flex items-center gap-2 transition-all shadow-md shadow-[#00E5FF]/20 hover:scale-102 cursor-pointer"
+                  onClick={handleSharePlaylist}
+                  className="py-2.5 px-3.5 rounded-xl bg-[#12141D] hover:bg-[#1C1E2A] border border-[#1E2030] hover:border-[#353950] text-xs font-semibold text-white flex items-center gap-2 transition-all cursor-pointer"
+                  title="Share playlist reel"
                 >
-                  {isPlayingAll ? (
+                  {copiedLink ? (
                     <>
-                      <Pause className="w-4 h-4 fill-current" />
-                      <span>Pause Sequential Playback</span>
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      <span className="text-emerald-400">Link copied!</span>
                     </>
                   ) : (
                     <>
-                      <Play className="w-4 h-4 fill-current" />
-                      <span>Play All ({resolvedClips.length} Clips)</span>
+                      <Share2 className="w-3.5 h-3.5 text-[#00E5FF]" />
+                      <span>Share Reel</span>
                     </>
                   )}
                 </button>
-              )}
+
+                {resolvedClips.length > 0 && (
+                  <button
+                    onClick={handleStartPlayAll}
+                    className="py-2.5 px-4 rounded-xl bg-[#00E5FF] hover:bg-[#38EDFF] text-[#050608] font-semibold text-xs flex items-center gap-2 transition-all shadow-md shadow-[#00E5FF]/20 hover:scale-102 cursor-pointer shrink-0"
+                  >
+                    {isPlayingAll ? (
+                      <>
+                        <Pause className="w-4 h-4 fill-current" />
+                        <span>Pause</span>
+                      </>
+                    ) : (
+                      <>
+                        <Play className="w-4 h-4 fill-current" />
+                        <span>Play All</span>
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* Sequential Playback Player Card (When Active) */}
@@ -400,7 +527,27 @@ export default function PlaylistDetailClient({
                     </div>
 
                     {/* Right: Source Meeting Link & Actions */}
-                    <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
+                    <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                      {/* Reorder Buttons */}
+                      <div className="flex items-center bg-[#12141D] border border-[#1E2030] rounded-lg p-0.5">
+                        <button
+                          onClick={() => handleMoveClip(idx, "up")}
+                          disabled={idx === 0}
+                          className="p-1 text-[#6B6F82] hover:text-white disabled:opacity-20 transition-colors cursor-pointer"
+                          title="Move up"
+                        >
+                          <ChevronUp className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => handleMoveClip(idx, "down")}
+                          disabled={idx === resolvedClips.length - 1}
+                          className="p-1 text-[#6B6F82] hover:text-white disabled:opacity-20 transition-colors cursor-pointer"
+                          title="Move down"
+                        >
+                          <ChevronDown className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
                       <Link
                         href={`/meeting/${clip.meeting.id}`}
                         className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-[#12141D] hover:bg-[#1C1E2A] border border-[#1E2030] hover:border-[#353950] text-xs text-[#C5C8D8] hover:text-white transition-all group/meet"
@@ -410,7 +557,7 @@ export default function PlaylistDetailClient({
                           alt=""
                           className="w-5 h-4 rounded object-cover border border-[#1E2030]"
                         />
-                        <span className="truncate max-w-[140px] text-[11px]">
+                        <span className="truncate max-w-[130px] text-[11px]">
                           {clip.meeting.title}
                         </span>
                         <ExternalLink className="w-3 h-3 text-[#555869] group-hover/meet:text-[#00E5FF]" />

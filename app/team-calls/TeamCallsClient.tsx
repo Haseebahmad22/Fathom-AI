@@ -1,8 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
-import { Users, Search, Share2 } from "lucide-react";
-import { mockMeetings, Meeting } from "@/lib/mock-data";
+import React, { useState, useMemo } from "react";
+import { Users, Search, Share2, Filter, UserCheck } from "lucide-react";
+import {
+  Meeting,
+  getAllMeetings,
+  deleteMeetingById,
+} from "@/lib/mock-data";
 import TopNav, { UserProfile } from "@/components/dashboard/TopNav";
 import MeetingCardGrid from "@/components/dashboard/MeetingCardGrid";
 import AskPanel from "@/components/dashboard/AskPanel";
@@ -14,9 +18,37 @@ interface TeamCallsClientProps {
 export default function TeamCallsClient({ user }: TeamCallsClientProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("team-calls");
+  const [selectedCollaborator, setSelectedCollaborator] = useState<string>("all");
+  const [allMeetings, setAllMeetings] = useState<Meeting[]>(() => getAllMeetings());
 
   // Filter to only meetings where sharedBy is set
-  const sharedMeetings: Meeting[] = mockMeetings.filter((m) => !!m.sharedBy);
+  const sharedMeetings: Meeting[] = useMemo(() => {
+    return allMeetings.filter((m) => !!m.sharedBy);
+  }, [allMeetings]);
+
+  // Extract unique collaborators
+  const collaborators = useMemo(() => {
+    const map = new Map<string, string>();
+    sharedMeetings.forEach((m) => {
+      if (m.sharedBy) {
+        map.set(m.sharedBy.name, m.sharedBy.avatarInitials);
+      }
+    });
+    return Array.from(map.entries()).map(([name, initials]) => ({
+      name,
+      initials,
+    }));
+  }, [sharedMeetings]);
+
+  const filteredMeetings = useMemo(() => {
+    if (selectedCollaborator === "all") return sharedMeetings;
+    return sharedMeetings.filter((m) => m.sharedBy?.name === selectedCollaborator);
+  }, [sharedMeetings, selectedCollaborator]);
+
+  const handleDeleteMeeting = (id: string) => {
+    const updated = deleteMeetingById(id);
+    setAllMeetings(updated);
+  };
 
   return (
     <div className="h-screen w-screen bg-[#050608] text-white flex flex-col overflow-hidden font-sans select-none">
@@ -36,9 +68,9 @@ export default function TeamCallsClient({ user }: TeamCallsClientProps) {
           {/* Ambient top glow */}
           <div className="pointer-events-none absolute top-0 left-0 right-0 h-[300px] bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(0,229,255,0.04),transparent_70%)]" />
 
-          <div className="relative z-10 p-6 lg:p-8">
+          <div className="relative z-10 p-6 lg:p-8 space-y-6">
             {/* Header with Team Context */}
-            <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#1A1D2E]">
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="text-2xl font-bold text-white tracking-tight">
@@ -50,34 +82,70 @@ export default function TeamCallsClient({ user }: TeamCallsClientProps) {
                   </span>
                 </div>
                 <p className="text-sm text-[#8E92A6] mt-1">
-                  {sharedMeetings.length} calls shared by your team members and subcontractors
+                  {filteredMeetings.length} {filteredMeetings.length === 1 ? "call" : "calls"} shared with your workspace
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 text-xs text-[#8E92A6] bg-[#0A0C12] border border-[#1E2030] px-3 py-1.5 rounded-lg">
-                <Share2 className="w-3.5 h-3.5 text-[#00E5FF]" />
-                <span>Showing externally and internally shared recordings</span>
+              {/* Collaborator Filter Chips */}
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  onClick={() => setSelectedCollaborator("all")}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                    selectedCollaborator === "all"
+                      ? "bg-[#00E5FF] text-[#050608] shadow-sm shadow-[#00E5FF]/20"
+                      : "bg-[#0A0C12] hover:bg-[#12141D] text-[#8E92A6] hover:text-white border border-[#1E2030]"
+                  }`}
+                >
+                  All ({sharedMeetings.length})
+                </button>
+
+                {collaborators.map((c) => {
+                  const isSelected = selectedCollaborator === c.name;
+                  const count = sharedMeetings.filter((m) => m.sharedBy?.name === c.name).length;
+                  return (
+                    <button
+                      key={c.name}
+                      onClick={() => setSelectedCollaborator(c.name)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                        isSelected
+                          ? "bg-[#00E5FF] text-[#050608] shadow-sm shadow-[#00E5FF]/20"
+                          : "bg-[#0A0C12] hover:bg-[#12141D] text-[#8E92A6] hover:text-white border border-[#1E2030]"
+                      }`}
+                    >
+                      <span className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-[7px] font-bold ${
+                        isSelected ? "bg-black text-[#00E5FF]" : "bg-[#1E2030] text-[#00E5FF]"
+                      }`}>
+                        {c.initials}
+                      </span>
+                      <span>{c.name}</span>
+                      <span className="opacity-60 text-[10px]">({count})</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
             {/* Grid or Empty State */}
-            {sharedMeetings.length === 0 ? (
+            {filteredMeetings.length === 0 ? (
               <div className="flex flex-col items-center justify-center p-12 text-center rounded-2xl bg-[#0A0C12] border border-[#1A1D2E] max-w-lg mx-auto my-12">
                 <div className="w-12 h-12 rounded-xl bg-[#12141D] border border-[#1E2030] flex items-center justify-center text-[#555869] mb-4">
                   <Users className="w-6 h-6" />
                 </div>
                 <h3 className="text-base font-semibold text-white">
-                  No team calls shared yet
+                  No team calls found
                 </h3>
                 <p className="text-xs text-[#8E92A6] mt-1 max-w-sm">
-                  When collaborators or team members share their call recordings with you, they will appear here automatically.
+                  {selectedCollaborator !== "all"
+                    ? `No recordings found shared by ${selectedCollaborator}.`
+                    : "When collaborators or team members share their call recordings with you, they will appear here automatically."}
                 </p>
               </div>
             ) : (
               <MeetingCardGrid
-                meetings={sharedMeetings}
+                meetings={filteredMeetings}
                 searchQuery={searchQuery}
                 onClearSearch={() => setSearchQuery("")}
+                onDeleteMeeting={handleDeleteMeeting}
               />
             )}
           </div>

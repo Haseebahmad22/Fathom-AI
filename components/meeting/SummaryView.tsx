@@ -481,9 +481,16 @@ export default function SummaryView({ summary, meeting }: SummaryViewProps) {
   const [selectedTemplate, setSelectedTemplate] = useState<string>("enhanced");
   const [copied, setCopied] = useState<boolean>(false);
   const [feedbackFlash, setFeedbackFlash] = useState<boolean>(false);
+  const [customNotes, setCustomNotes] = useState<{ [templateId: string]: GeneratedBullet[] }>({});
+  const [isAddingNote, setIsAddingNote] = useState<boolean>(false);
+  const [newNoteCategory, setNewNoteCategory] = useState<string>("Key Takeaway");
+  const [newNoteText, setNewNoteText] = useState<string>("");
 
   // Compute the dynamic summary based on the active template
-  const activeBullets = getTemplateSummary(selectedTemplate, summary, meeting);
+  const templateBullets = getTemplateSummary(selectedTemplate, summary, meeting);
+  const activeCustom = customNotes[selectedTemplate] || [];
+  const activeBullets = [...templateBullets, ...activeCustom];
+
   const activeTemplateObj =
     TEMPLATES.find((t) => t.id === selectedTemplate) || TEMPLATES[0];
 
@@ -501,6 +508,35 @@ export default function SummaryView({ summary, meeting }: SummaryViewProps) {
     navigator.clipboard.writeText(fullText);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleAddCustomNote = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newNoteText.trim()) return;
+
+    const newBullet: GeneratedBullet = {
+      category: newNoteCategory.trim() || "Note",
+      text: newNoteText.trim(),
+    };
+
+    setCustomNotes((prev) => ({
+      ...prev,
+      [selectedTemplate]: [...(prev[selectedTemplate] || []), newBullet],
+    }));
+
+    setNewNoteText("");
+    setIsAddingNote(false);
+  };
+
+  const handleRemoveCustomNote = (index: number) => {
+    setCustomNotes((prev) => {
+      const current = [...(prev[selectedTemplate] || [])];
+      current.splice(index, 1);
+      return {
+        ...prev,
+        [selectedTemplate]: current,
+      };
+    });
   };
 
   return (
@@ -553,21 +589,89 @@ export default function SummaryView({ summary, meeting }: SummaryViewProps) {
           key={selectedTemplate}
           className="space-y-2.5 animate-in fade-in-50 duration-200"
         >
-          {activeBullets.map((bullet, idx) => (
-            <div key={idx} className="flex items-start gap-2.5 group">
-              <span className="text-[#00E5FF] text-sm leading-none mt-1 shrink-0 group-hover:scale-125 transition-transform">
-                •
-              </span>
-              <div className="text-xs leading-relaxed text-[#C5C8D8]">
-                {bullet.category && (
-                  <span className="font-semibold text-white mr-1.5">
-                    {bullet.category}:
-                  </span>
+          {activeBullets.map((bullet, idx) => {
+            const isCustom = idx >= templateBullets.length;
+            const customIdx = idx - templateBullets.length;
+
+            return (
+              <div key={idx} className="flex items-start gap-2.5 group relative">
+                <span className={`text-sm leading-none mt-1 shrink-0 group-hover:scale-125 transition-transform ${isCustom ? "text-purple-400" : "text-[#00E5FF]"}`}>
+                  •
+                </span>
+                <div className="text-xs leading-relaxed text-[#C5C8D8] flex-1">
+                  {bullet.category && (
+                    <span className="font-semibold text-white mr-1.5">
+                      {bullet.category}:
+                    </span>
+                  )}
+                  <span>{bullet.text}</span>
+                  {isCustom && (
+                    <span className="ml-2 text-[9px] font-bold text-purple-400 bg-purple-950/40 border border-purple-800/40 px-1 py-0.2 rounded">
+                      Custom Note
+                    </span>
+                  )}
+                </div>
+
+                {isCustom && (
+                  <button
+                    onClick={() => handleRemoveCustomNote(customIdx)}
+                    className="opacity-0 group-hover:opacity-100 text-[#555869] hover:text-rose-400 transition-opacity p-0.5 cursor-pointer"
+                    title="Remove note"
+                  >
+                    ×
+                  </button>
                 )}
-                <span>{bullet.text}</span>
               </div>
-            </div>
-          ))}
+            );
+          })}
+        </div>
+
+        {/* Inline Add Custom Note Form */}
+        <div className="mt-3 pt-3 border-t border-[#1A1D2E]">
+          {isAddingNote ? (
+            <form onSubmit={handleAddCustomNote} className="space-y-2 p-2.5 rounded-lg bg-[#0E111A] border border-[#25283D] animate-in fade-in">
+              <div className="grid grid-cols-3 gap-2">
+                <input
+                  type="text"
+                  placeholder="Category (e.g. Next Step, Risk)"
+                  value={newNoteCategory}
+                  onChange={(e) => setNewNoteCategory(e.target.value)}
+                  className="px-2.5 py-1.5 bg-[#12141D] border border-[#1E2030] rounded-lg text-xs text-white placeholder-[#555869] focus:outline-none focus:border-[#00E5FF]/40"
+                />
+                <input
+                  type="text"
+                  placeholder="Enter custom takeaway or observation..."
+                  value={newNoteText}
+                  onChange={(e) => setNewNoteText(e.target.value)}
+                  autoFocus
+                  className="col-span-2 px-2.5 py-1.5 bg-[#12141D] border border-[#00E5FF]/40 rounded-lg text-xs text-white placeholder-[#555869] focus:outline-none"
+                />
+              </div>
+              <div className="flex items-center justify-end gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => setIsAddingNote(false)}
+                  className="px-2 py-1 rounded text-[10px] text-[#8E92A6] hover:text-white cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={!newNoteText.trim()}
+                  className="px-2.5 py-1 rounded bg-[#00E5FF] text-[#050608] font-semibold text-[10px] hover:bg-[#38EDFF] disabled:opacity-30 cursor-pointer"
+                >
+                  Add Takeaway
+                </button>
+              </div>
+            </form>
+          ) : (
+            <button
+              onClick={() => setIsAddingNote(true)}
+              className="text-[11px] font-medium text-[#8E92A6] hover:text-[#00E5FF] flex items-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <span>+ Add custom takeaway note</span>
+            </button>
+          )}
         </div>
       </div>
 

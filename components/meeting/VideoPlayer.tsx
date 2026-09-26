@@ -1,14 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Volume2,
   VolumeX,
   Maximize2,
+  Minimize2,
   Play,
   Pause,
   Video,
   Radio,
+  RotateCcw,
+  RotateCw,
 } from "lucide-react";
 import { Meeting } from "@/lib/mock-data";
 
@@ -27,8 +30,13 @@ export default function VideoPlayer({
   isPlaying,
   onTogglePlay,
 }: VideoPlayerProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [speed, setSpeed] = useState<string>("1x");
   const [isMuted, setIsMuted] = useState<boolean>(false);
+  const [volume, setVolume] = useState<number>(80);
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+  const [showVolumeSlider, setShowVolumeSlider] = useState<boolean>(false);
+
   const [imgSrc, setImgSrc] = useState<string>(() => {
     if (meeting.thumbnail) return meeting.thumbnail;
     if (meeting.id === "meeting-2") return "/images/thumb_standup.jpg";
@@ -47,11 +55,57 @@ export default function VideoPlayer({
     return `${mins}:${remainder.toString().padStart(2, "0")}`;
   };
 
+  const handleSkipBack = () => {
+    onSeek(Math.max(0, currentSeconds - 10));
+  };
+
+  const handleSkipForward = () => {
+    onSeek(Math.min(totalSeconds, currentSeconds + 10));
+  };
+
   const cycleSpeed = () => {
-    const speeds = ["1x", "1.25x", "1.5x", "2x"];
+    const speeds = ["0.75x", "1x", "1.25x", "1.5x", "2x"];
     const nextIdx = (speeds.indexOf(speed) + 1) % speeds.length;
     setSpeed(speeds[nextIdx]);
   };
+
+  const toggleFullscreen = () => {
+    if (!containerRef.current) return;
+    if (!document.fullscreenElement) {
+      containerRef.current.requestFullscreen().catch(() => {});
+      setIsFullscreen(true);
+    } else {
+      document.exitFullscreen().catch(() => {});
+      setIsFullscreen(false);
+    }
+  };
+
+  // Keyboard controls
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if user is typing in an input or textarea
+      if (["INPUT", "TEXTAREA"].includes((e.target as HTMLElement)?.tagName)) {
+        return;
+      }
+
+      if (e.code === "Space") {
+        e.preventDefault();
+        onTogglePlay();
+      } else if (e.key.toLowerCase() === "j") {
+        e.preventDefault();
+        handleSkipBack();
+      } else if (e.key.toLowerCase() === "l") {
+        e.preventDefault();
+        handleSkipForward();
+      } else if (e.key.toLowerCase() === "m") {
+        e.preventDefault();
+        setIsMuted((prev) => !prev);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [currentSeconds, totalSeconds, onTogglePlay]);
 
   const activeSpeaker = meeting.participants[0] || {
     name: "Alex Morgan",
@@ -59,10 +113,21 @@ export default function VideoPlayer({
   };
 
   return (
-    <div className="w-full bg-[#050608] border-b border-[#1A1D2E] flex flex-col select-none shrink-0">
-      {/* Compact Video / Thumbnail Display Area */}
-      <div className="relative w-full aspect-[16/9] max-h-[220px] lg:max-h-[250px] xl:max-h-[280px] bg-[#0A0C12] overflow-hidden flex items-center justify-center group">
-        {/* Crisp Meeting Thumbnail Image */}
+    <div
+      ref={containerRef}
+      className={`w-full bg-[#050608] border-b border-[#1A1D2E] flex flex-col select-none shrink-0 ${
+        isFullscreen ? "h-screen justify-between" : ""
+      }`}
+    >
+      {/* Video / Thumbnail Display Area */}
+      <div
+        className={`relative w-full overflow-hidden flex items-center justify-center group bg-[#0A0C12] ${
+          isFullscreen
+            ? "flex-1 max-h-none"
+            : "aspect-[16/9] max-h-[220px] lg:max-h-[250px] xl:max-h-[280px]"
+        }`}
+      >
+        {/* Meeting Thumbnail Image */}
         <img
           src={imgSrc}
           alt={meeting.title}
@@ -78,7 +143,11 @@ export default function VideoPlayer({
         {/* Top-Left: Live / Call Recording Badge */}
         <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5 pointer-events-none">
           <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[10px] font-medium text-white shadow-lg">
-            <Radio className={`w-3 h-3 ${isPlaying ? "text-[#00E5FF] animate-pulse" : "text-emerald-400"}`} />
+            <Radio
+              className={`w-3 h-3 ${
+                isPlaying ? "text-[#00E5FF] animate-pulse" : "text-emerald-400"
+              }`}
+            />
             <span>{isPlaying ? "Playing recording" : "Call Recording"}</span>
           </div>
           <div className="px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[10px] font-mono text-[#8E92A6]">
@@ -97,14 +166,30 @@ export default function VideoPlayer({
         {/* Bottom-Left: Active Speaker Badge */}
         <div className="absolute bottom-2.5 left-2.5 pointer-events-none flex items-center gap-1.5">
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/70 backdrop-blur-md border border-white/10 text-[11px] text-white shadow-lg">
-            <span className={`w-1.5 h-1.5 rounded-full ${isPlaying ? "bg-[#00E5FF] animate-ping" : "bg-emerald-400"}`} />
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${
+                isPlaying ? "bg-[#00E5FF] animate-ping" : "bg-emerald-400"
+              }`}
+            />
             <span className="font-medium">{activeSpeaker.name}</span>
-            <span className="text-[#8E92A6] text-[10px]">({activeSpeaker.role || "Host"})</span>
+            <span className="text-[#8E92A6] text-[10px]">
+              ({activeSpeaker.role || "Host"})
+            </span>
           </div>
         </div>
 
-        {/* Center Play / Pause Floating Controller */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
+        {/* Center Playback Controls (Play/Pause & ±10s Jumpers) */}
+        <div className="absolute inset-0 flex items-center justify-center gap-4">
+          {/* Skip Back -10s */}
+          <button
+            onClick={handleSkipBack}
+            className="w-9 h-9 rounded-full bg-black/50 hover:bg-black/80 border border-white/10 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:scale-105 active:scale-95 cursor-pointer backdrop-blur-sm"
+            title="Skip back 10s (J)"
+          >
+            <RotateCcw className="w-4 h-4 text-[#C5C8D8]" />
+          </button>
+
+          {/* Primary Play/Pause Button */}
           <button
             onClick={onTogglePlay}
             aria-label={isPlaying ? "Pause video" : "Play video"}
@@ -115,22 +200,55 @@ export default function VideoPlayer({
             ) : (
               <Play className="w-5 h-5 fill-current ml-0.5" />
             )}
-            {/* Pulsing ring on hover */}
             <span className="absolute inset-0 rounded-full border border-[#00E5FF] animate-ping opacity-25 group-hover/btn:opacity-60" />
+          </button>
+
+          {/* Skip Forward +10s */}
+          <button
+            onClick={handleSkipForward}
+            className="w-9 h-9 rounded-full bg-black/50 hover:bg-black/80 border border-white/10 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:scale-105 active:scale-95 cursor-pointer backdrop-blur-sm"
+            title="Skip forward 10s (L)"
+          >
+            <RotateCw className="w-4 h-4 text-[#C5C8D8]" />
           </button>
         </div>
       </div>
 
-      {/* Audio / Video Scrubber Timeline Bar - Compact Height */}
+      {/* Audio / Video Scrubber Timeline Bar */}
       <div className="px-4 py-2 bg-[#0A0C12] flex items-center gap-3 text-xs select-none border-t border-[#1A1D2E]">
-        {/* Mute button */}
-        <button
-          onClick={() => setIsMuted(!isMuted)}
-          className="text-[#8E92A6] hover:text-white transition-colors p-0.5 rounded hover:bg-[#12141D]"
-          title={isMuted ? "Unmute" : "Mute"}
+        {/* Volume & Mute with Hover Slider */}
+        <div
+          className="relative flex items-center gap-1.5"
+          onMouseEnter={() => setShowVolumeSlider(true)}
+          onMouseLeave={() => setShowVolumeSlider(false)}
         >
-          {isMuted ? <VolumeX className="w-3.5 h-3.5 text-rose-400" /> : <Volume2 className="w-3.5 h-3.5" />}
-        </button>
+          <button
+            onClick={() => setIsMuted(!isMuted)}
+            className="text-[#8E92A6] hover:text-white transition-colors p-1 rounded hover:bg-[#12141D] cursor-pointer"
+            title={isMuted ? "Unmute (M)" : "Mute (M)"}
+          >
+            {isMuted || volume === 0 ? (
+              <VolumeX className="w-3.5 h-3.5 text-rose-400" />
+            ) : (
+              <Volume2 className="w-3.5 h-3.5" />
+            )}
+          </button>
+
+          {showVolumeSlider && (
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={isMuted ? 0 : volume}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                setVolume(val);
+                if (val > 0 && isMuted) setIsMuted(false);
+              }}
+              className="w-16 h-1 bg-[#1E2030] rounded-lg appearance-none cursor-pointer accent-[#00E5FF] transition-all"
+            />
+          )}
+        </div>
 
         {/* Current Elapsed Time */}
         <span className="font-mono text-[11px] font-medium text-white min-w-[32px]">
@@ -146,12 +264,10 @@ export default function VideoPlayer({
             onSeek(Math.floor(clickPos * totalSeconds));
           }}
         >
-          {/* Active play progress gradient */}
           <div
             className="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-[#00E5FF] to-[#38EDFF] rounded-full transition-[width] duration-150 shadow-[0_0_8px_rgba(0,229,255,0.4)]"
             style={{ width: `${progressPercent}%` }}
           />
-          {/* Scrubber handle */}
           <div
             className="absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-white shadow-md shadow-[#00E5FF]/60 opacity-0 group-hover/track:opacity-100 transition-opacity pointer-events-none"
             style={{ left: `calc(${progressPercent}% - 5px)` }}
@@ -166,7 +282,7 @@ export default function VideoPlayer({
         {/* Playback Speed Toggle */}
         <button
           onClick={cycleSpeed}
-          className="px-2 py-0.5 rounded font-mono text-[10px] font-semibold text-[#8E92A6] hover:text-white bg-[#12141D] hover:bg-[#1A1D2E] border border-[#1E2030] hover:border-[#353950] transition-all"
+          className="px-2 py-0.5 rounded font-mono text-[10px] font-semibold text-[#8E92A6] hover:text-white bg-[#12141D] hover:bg-[#1A1D2E] border border-[#1E2030] hover:border-[#353950] transition-all cursor-pointer"
           title="Playback speed"
         >
           {speed}
@@ -174,10 +290,11 @@ export default function VideoPlayer({
 
         {/* Fullscreen Toggle */}
         <button
-          className="text-[#8E92A6] hover:text-white transition-colors p-0.5 rounded hover:bg-[#12141D]"
-          title="Fullscreen"
+          onClick={toggleFullscreen}
+          className="text-[#8E92A6] hover:text-white transition-colors p-1 rounded hover:bg-[#12141D] cursor-pointer"
+          title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
         >
-          <Maximize2 className="w-3.5 h-3.5" />
+          {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
         </button>
       </div>
     </div>

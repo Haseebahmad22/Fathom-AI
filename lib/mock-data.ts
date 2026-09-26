@@ -1478,3 +1478,56 @@ export function deleteStoredAlert(alertId: string): Alert[] {
   }
 }
 
+// Client-side storage helpers for Meetings (Uploads & Deletions)
+export function getAllMeetings(): Meeting[] {
+  if (typeof window === "undefined") return mockMeetings;
+  try {
+    const customRaw = localStorage.getItem("fathom_custom_meetings");
+    const custom: Meeting[] = customRaw ? JSON.parse(customRaw) : [];
+    const deletedRaw = localStorage.getItem("fathom_deleted_meeting_ids");
+    const deletedIds: string[] = deletedRaw ? JSON.parse(deletedRaw) : [];
+    const combined = [...custom, ...mockMeetings].filter(
+      (m) => !deletedIds.includes(m.id)
+    );
+    return combined;
+  } catch {
+    return mockMeetings;
+  }
+}
+
+export function saveCustomMeeting(meeting: Meeting): Meeting[] {
+  if (typeof window === "undefined") return [meeting, ...mockMeetings];
+  try {
+    const customRaw = localStorage.getItem("fathom_custom_meetings");
+    const custom: Meeting[] = customRaw ? JSON.parse(customRaw) : [];
+    const updated = [meeting, ...custom];
+    localStorage.setItem("fathom_custom_meetings", JSON.stringify(updated));
+    return getAllMeetings();
+  } catch {
+    return [meeting, ...mockMeetings];
+  }
+}
+
+export function deleteMeetingById(meetingId: string): Meeting[] {
+  if (typeof window === "undefined") return mockMeetings;
+  try {
+    const deletedRaw = localStorage.getItem("fathom_deleted_meeting_ids");
+    const deletedIds: string[] = deletedRaw ? JSON.parse(deletedRaw) : [];
+    if (!deletedIds.includes(meetingId)) {
+      deletedIds.push(meetingId);
+      localStorage.setItem("fathom_deleted_meeting_ids", JSON.stringify(deletedIds));
+    }
+    // Also remove from custom if present
+    const customRaw = localStorage.getItem("fathom_custom_meetings");
+    if (customRaw) {
+      const custom: Meeting[] = JSON.parse(customRaw);
+      const updatedCustom = custom.filter((m) => m.id !== meetingId);
+      localStorage.setItem("fathom_custom_meetings", JSON.stringify(updatedCustom));
+    }
+    return getAllMeetings();
+  } catch {
+    return mockMeetings;
+  }
+}
+
+

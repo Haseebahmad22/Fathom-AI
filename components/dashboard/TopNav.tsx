@@ -1,9 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, HelpCircle, LogOut, Bell, Settings } from "lucide-react";
+import { Search, HelpCircle, LogOut, Bell, Settings, Command } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import NotificationsTray from "./NotificationsTray";
+import SettingsModal from "./SettingsModal";
+import ShortcutsHelpModal from "./ShortcutsHelpModal";
+import CommandPalette from "./CommandPalette";
 
 export interface UserProfile {
   name: string;
@@ -33,6 +37,34 @@ export default function TopNav({
     { id: "alerts", label: "Alerts", href: "/alerts" },
   ];
 
+  // Modals & Panels State
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(3);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+
+  // Global keyboard shortcuts (Cmd+K for Command Palette, ? for Help)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Cmd/Ctrl + K
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setIsCommandPaletteOpen((prev) => !prev);
+      }
+      // ? for shortcuts help (when not typing in an input)
+      if (
+        e.key === "?" &&
+        !["INPUT", "TEXTAREA"].includes((e.target as HTMLElement)?.tagName)
+      ) {
+        e.preventDefault();
+        setIsHelpOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   const handleSignOut = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
@@ -42,7 +74,7 @@ export default function TopNav({
   const initial = user?.name ? user.name[0].toUpperCase() : "U";
 
   return (
-    <header className="bg-[#0A0C12] border-b border-[#1A1D2E] text-white shrink-0 select-none">
+    <header className="bg-[#0A0C12] border-b border-[#1A1D2E] text-white shrink-0 select-none relative z-30">
       {/* Upper Navigation Bar */}
       <div className="h-16 px-6 lg:px-8 flex items-center justify-between gap-6">
         {/* Left: Brand Logo */}
@@ -58,31 +90,72 @@ export default function TopNav({
           </Link>
         </div>
 
-        {/* Center: Search Bar */}
+        {/* Center: Search Bar with Command Palette trigger */}
         <div className="flex-1 max-w-xl">
-          <div className="relative">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#6B6F82]" />
+          <div
+            onClick={() => setIsCommandPaletteOpen(true)}
+            className="relative cursor-pointer group"
+          >
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#6B6F82] group-hover:text-[#00E5FF] transition-colors" />
             <input
               type="text"
-              placeholder="Search meetings, people, topics..."
+              readOnly
+              placeholder="Search meetings, transcripts, playlists (⌘K)..."
               value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-[#12141D] border border-[#1E2030] rounded-xl text-sm text-white placeholder:text-[#555869] focus:outline-none focus:border-[#00E5FF]/50 focus:bg-[#141620] transition-all"
+              className="w-full pl-10 pr-20 py-2.5 bg-[#12141D] group-hover:bg-[#151824] border border-[#1E2030] group-hover:border-[#00E5FF]/40 rounded-xl text-sm text-white placeholder:text-[#555869] cursor-pointer transition-all"
             />
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+              <kbd className="px-1.5 py-0.5 rounded bg-[#1A1D2E] border border-[#2A2E44] text-[10px] font-mono text-[#8E92A6]">
+                ⌘K
+              </kbd>
+            </div>
           </div>
         </div>
 
         {/* Right: Actions & User */}
         <div className="flex items-center gap-3 shrink-0">
-          <button className="w-9 h-9 rounded-lg bg-[#12141D] border border-[#1E2030] flex items-center justify-center text-[#6B6F82] hover:text-white hover:bg-[#1C1E2A] hover:border-[#2A2D42] transition-all">
-            <Bell className="w-4 h-4" />
-          </button>
+          {/* Notifications Trigger */}
+          <div className="relative">
+            <button
+              onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+              className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-all cursor-pointer relative ${
+                isNotificationsOpen
+                  ? "bg-[#1C1E2A] border-[#00E5FF]/50 text-[#00E5FF]"
+                  : "bg-[#12141D] border-[#1E2030] text-[#6B6F82] hover:text-white hover:bg-[#1C1E2A]"
+              }`}
+              title="Notifications"
+            >
+              <Bell className="w-4 h-4" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#00E5FF] text-[#050608] font-bold text-[9px] flex items-center justify-center border border-[#0A0C12]">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
 
-          <button className="w-9 h-9 rounded-lg bg-[#12141D] border border-[#1E2030] flex items-center justify-center text-[#6B6F82] hover:text-white hover:bg-[#1C1E2A] hover:border-[#2A2D42] transition-all">
+            {/* Notifications Dropdown Tray */}
+            <NotificationsTray
+              isOpen={isNotificationsOpen}
+              onClose={() => setIsNotificationsOpen(false)}
+              onUnreadCountChange={setUnreadCount}
+            />
+          </div>
+
+          {/* Help & Shortcuts Trigger */}
+          <button
+            onClick={() => setIsHelpOpen(true)}
+            className="w-9 h-9 rounded-lg bg-[#12141D] border border-[#1E2030] flex items-center justify-center text-[#6B6F82] hover:text-white hover:bg-[#1C1E2A] hover:border-[#2A2D42] transition-all cursor-pointer"
+            title="Keyboard Shortcuts & Help (?)"
+          >
             <HelpCircle className="w-4 h-4" />
           </button>
 
-          <button className="w-9 h-9 rounded-lg bg-[#12141D] border border-[#1E2030] flex items-center justify-center text-[#6B6F82] hover:text-white hover:bg-[#1C1E2A] hover:border-[#2A2D42] transition-all">
+          {/* Settings Trigger */}
+          <button
+            onClick={() => setIsSettingsOpen(true)}
+            className="w-9 h-9 rounded-lg bg-[#12141D] border border-[#1E2030] flex items-center justify-center text-[#6B6F82] hover:text-white hover:bg-[#1C1E2A] hover:border-[#2A2D42] transition-all cursor-pointer"
+            title="Workspace Settings"
+          >
             <Settings className="w-4 h-4" />
           </button>
 
@@ -146,6 +219,23 @@ export default function TopNav({
           );
         })}
       </div>
+
+      {/* Global Modals */}
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+      />
+
+      <ShortcutsHelpModal
+        isOpen={isHelpOpen}
+        onClose={() => setIsHelpOpen(false)}
+      />
+
+      <CommandPalette
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
+        onOpenSettings={() => setIsSettingsOpen(true)}
+      />
     </header>
   );
 }

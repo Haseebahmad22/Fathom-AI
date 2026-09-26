@@ -54,6 +54,9 @@ export default function AlertsClient({ user }: AlertsClientProps) {
   const [newKeyword, setNewKeyword] = useState("");
   const [newName, setNewName] = useState("");
   const [newScope, setNewScope] = useState<"anyone" | "external" | "team">("anyone");
+  const [notifyInApp, setNotifyInApp] = useState(true);
+  const [notifySlack, setNotifySlack] = useState(false);
+  const [notifyEmail, setNotifyEmail] = useState(false);
 
   useEffect(() => {
     setAlerts(getStoredAlerts());
@@ -82,9 +85,6 @@ export default function AlertsClient({ user }: AlertsClientProps) {
     const matches: { meetingId: string; transcriptLineId: string }[] = [];
 
     mockMeetings.forEach((meeting) => {
-      // If scope filtering is specified
-      // For external scope: can filter by presence of external participants or non-team shared
-      // If anyone: match everywhere
       meeting.transcript.forEach((line) => {
         if (line.text.toLowerCase().includes(lowerKeyword)) {
           matches.push({
@@ -106,6 +106,26 @@ export default function AlertsClient({ user }: AlertsClientProps) {
 
     const updated = saveStoredAlert(newAlert);
     setAlerts(updated);
+
+    // If in-app notification enabled and matches found, record notification
+    if (notifyInApp && matches.length > 0) {
+      try {
+        const notifRaw = localStorage.getItem("fathom_notifications");
+        const notifs = notifRaw ? JSON.parse(notifRaw) : [];
+        const newNotif = {
+          id: `notif-${Date.now()}`,
+          type: "alert",
+          title: `Keyword Alert Triggered: #${trimmedKeyword}`,
+          description: `Discovered ${matches.length} mention${matches.length === 1 ? "" : "s"} across recorded transcripts.`,
+          timestamp: "Just now",
+          isRead: false,
+          link: "/alerts",
+        };
+        localStorage.setItem("fathom_notifications", JSON.stringify([newNotif, ...notifs]));
+      } catch {
+        // Ignore fallback
+      }
+    }
 
     // Auto expand newly created alert
     setExpandedAlertIds((prev) => ({
@@ -504,6 +524,43 @@ export default function AlertsClient({ user }: AlertsClientProps) {
                     <Users className="w-3.5 h-3.5 text-emerald-400" />
                     <span>Team Only</span>
                   </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-[#8E92A6] mb-1.5 uppercase tracking-wider">
+                  Notification Destinations
+                </label>
+                <div className="space-y-1.5 text-xs">
+                  <label className="flex items-center gap-2 p-2 rounded-lg bg-[#12141D] border border-[#1E2030] cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={notifyInApp}
+                      onChange={(e) => setNotifyInApp(e.target.checked)}
+                      className="accent-[#00E5FF] w-3.5 h-3.5"
+                    />
+                    <span className="text-white">In-App Notification Bell & Tray</span>
+                  </label>
+
+                  <label className="flex items-center gap-2 p-2 rounded-lg bg-[#12141D] border border-[#1E2030] cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={notifySlack}
+                      onChange={(e) => setNotifySlack(e.target.checked)}
+                      className="accent-[#00E5FF] w-3.5 h-3.5"
+                    />
+                    <span className="text-[#8E92A6]">Slack Channel (#sales-alerts)</span>
+                  </label>
+
+                  <label className="flex items-center gap-2 p-2 rounded-lg bg-[#12141D] border border-[#1E2030] cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={notifyEmail}
+                      onChange={(e) => setNotifyEmail(e.target.checked)}
+                      className="accent-[#00E5FF] w-3.5 h-3.5"
+                    />
+                    <span className="text-[#8E92A6]">Daily 5 PM Email Digest</span>
+                  </label>
                 </div>
               </div>
 
