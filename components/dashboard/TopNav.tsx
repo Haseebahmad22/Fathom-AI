@@ -66,8 +66,14 @@ export default function TopNav({
   }, []);
 
   const handleSignOut = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
+    try {
+      const supabase = createClient();
+      await supabase.auth.signOut();
+    } catch {
+      // Ignore
+    }
+    document.cookie = "fathom_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    document.cookie = "fathom_demo_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
     window.location.href = "/";
   };
 
