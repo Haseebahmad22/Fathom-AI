@@ -94,20 +94,34 @@ export default function MeetingCard({ meeting }: MeetingCardProps) {
         </div>
 
         {/* Participant Avatars Row */}
-        <div className="flex items-center -space-x-1.5 pt-0.5">
-          {meeting.participants.slice(0, 4).map((p, i) => (
-            <div
-              key={i}
-              className="w-6 h-6 rounded-full border-2 border-[#0A0C12] flex items-center justify-center text-[9px] font-bold text-white"
-              style={{ backgroundColor: p.avatarColor }}
-              title={p.name}
-            >
-              {p.initials}
-            </div>
-          ))}
-          {meeting.participants.length > 4 && (
-            <div className="w-6 h-6 rounded-full border-2 border-[#0A0C12] bg-[#1E2030] flex items-center justify-center text-[9px] font-medium text-[#8E92A6]">
-              +{meeting.participants.length - 4}
+        <div className="flex items-center justify-between pt-0.5">
+          <div className="flex items-center -space-x-1.5">
+            {meeting.participants.slice(0, 4).map((p, i) => (
+              <div
+                key={i}
+                className="w-6 h-6 rounded-full border-2 border-[#0A0C12] flex items-center justify-center text-[9px] font-bold text-white"
+                style={{ backgroundColor: p.avatarColor }}
+                title={p.name}
+              >
+                {p.initials}
+              </div>
+            ))}
+            {meeting.participants.length > 4 && (
+              <div className="w-6 h-6 rounded-full border-2 border-[#0A0C12] bg-[#1E2030] flex items-center justify-center text-[9px] font-medium text-[#8E92A6]">
+                +{meeting.participants.length - 4}
+              </div>
+            )}
+          </div>
+
+          {/* Shared By Badge */}
+          {meeting.sharedBy && (
+            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#12141D] border border-[#1E2030] text-[11px] text-[#A6A9B8]">
+              <span className="w-3.5 h-3.5 rounded-full bg-[#00E5FF]/20 text-[#00E5FF] border border-[#00E5FF]/30 flex items-center justify-center text-[7px] font-bold shrink-0">
+                {meeting.sharedBy.avatarInitials}
+              </span>
+              <span className="truncate max-w-[130px]">
+                Shared by <strong className="text-white font-medium">{meeting.sharedBy.name}</strong>
+              </span>
             </div>
           )}
         </div>

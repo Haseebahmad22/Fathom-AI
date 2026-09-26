@@ -27,10 +27,10 @@ export default function TopNav({
   onTabChange,
 }: TopNavProps) {
   const tabs = [
-    { id: "my-calls", label: "My calls" },
-    { id: "team-calls", label: "Team calls" },
-    { id: "playlists", label: "Playlists" },
-    { id: "alerts", label: "Alerts" },
+    { id: "my-calls", label: "My calls", href: "/dashboard" },
+    { id: "team-calls", label: "Team calls", href: "/team-calls" },
+    { id: "playlists", label: "Playlists", href: "/playlists" },
+    { id: "alerts", label: "Alerts", href: "/alerts" },
   ];
 
   const handleSignOut = async () => {
@@ -128,9 +128,10 @@ export default function TopNav({
         {tabs.map((tab) => {
           const isSelected = activeTab === tab.id;
           return (
-            <button
+            <Link
               key={tab.id}
-              onClick={() => onTabChange(tab.id)}
+              href={tab.href}
+              onClick={() => onTabChange && onTabChange(tab.id)}
               className={`px-4 py-3 text-sm font-medium relative transition-all rounded-t-lg ${
                 isSelected
                   ? "text-white bg-[#12141D]"
@@ -141,7 +142,7 @@ export default function TopNav({
               {isSelected && (
                 <div className="absolute bottom-0 left-2 right-2 h-[2px] bg-[#00E5FF] rounded-full" />
               )}
-            </button>
+            </Link>
           );
         })}
       </div>

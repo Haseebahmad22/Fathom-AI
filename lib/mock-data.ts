@@ -58,6 +58,10 @@ export interface Meeting {
   date: string;
   durationMinutes: number;
   thumbnail?: string;
+  sharedBy?: {
+    name: string;
+    avatarInitials: string;
+  };
   participants: Participant[];
   transcript: TranscriptLine[];
   summary: SummaryBullet[];
@@ -326,6 +330,10 @@ export const mockMeetings: Meeting[] = [
     date: "2026-09-24T09:30:00Z",
     durationMinutes: 20,
     thumbnail: "/images/thumb_standup.jpg",
+    sharedBy: {
+      name: "David Chen",
+      avatarInitials: "DC",
+    },
     participants: [
       {
         name: "David Chen",
@@ -585,6 +593,10 @@ export const mockMeetings: Meeting[] = [
     date: "2026-09-18T16:00:00Z",
     durationMinutes: 45,
     thumbnail: "/images/thumb_onboarding.jpg",
+    sharedBy: {
+      name: "Elena Rostova",
+      avatarInitials: "ER",
+    },
     participants: [
       {
         name: "Elena Rostova",
@@ -1283,3 +1295,186 @@ export const mockTranscriptLines: TranscriptLine[] = mockMeetings.flatMap((m) =>
 export const mockSummaryBullets: SummaryBullet[] = mockMeetings.flatMap((m) => m.summary);
 export const mockActionItems: ActionItem[] = mockMeetings.flatMap((m) => m.actionItems);
 export const mockHighlights: Highlight[] = mockMeetings.flatMap((m) => m.highlights);
+
+export interface Playlist {
+  id: string;
+  name: string;
+  description?: string;
+  createdAt: string;
+  highlightRefs: { meetingId: string; highlightId: string }[];
+}
+
+export interface Alert {
+  id: string;
+  keyword: string;
+  name?: string;
+  scope: "anyone" | "external" | "team";
+  createdAt: string;
+  matches: { meetingId: string; transcriptLineId: string }[];
+}
+
+export const mockPlaylists: Playlist[] = [
+  {
+    id: "playlist-1",
+    name: "Customer Objections & Bot Friction",
+    description: "Prospect feedback on why traditional meeting bots fail and how bot-free capture converts buyers.",
+    createdAt: "2026-09-23T11:00:00Z",
+    highlightRefs: [
+      { meetingId: "meeting-1", highlightId: "h1-1" },
+      { meetingId: "meeting-1", highlightId: "h1-2" },
+    ],
+  },
+  {
+    id: "playlist-2",
+    name: "Engineering & Latency Optimization",
+    description: "Core infrastructure breakthroughs in trigram search indexing and failover reliability.",
+    createdAt: "2026-09-24T14:30:00Z",
+    highlightRefs: [
+      { meetingId: "meeting-2", highlightId: "h2-1" },
+      { meetingId: "meeting-5", highlightId: "h5-1" },
+    ],
+  },
+  {
+    id: "playlist-3",
+    name: "Customer Onboarding & Design Tokens",
+    description: "SSO rollout efficiency and Figma design token synchronization highlights.",
+    createdAt: "2026-09-25T09:15:00Z",
+    highlightRefs: [
+      { meetingId: "meeting-3", highlightId: "h3-1" },
+      { meetingId: "meeting-4", highlightId: "h4-1" },
+    ],
+  },
+];
+
+export const mockAlerts: Alert[] = [
+  {
+    id: "alert-1",
+    keyword: "Otter",
+    name: "Competitor Mention: Otter",
+    scope: "external",
+    createdAt: "2026-09-21T08:00:00Z",
+    matches: [
+      { meetingId: "meeting-1", transcriptLineId: "t1-7" },
+      { meetingId: "meeting-1", transcriptLineId: "t1-9" },
+    ],
+  },
+  {
+    id: "alert-2",
+    keyword: "security",
+    name: "Security & Compliance Inquiries",
+    scope: "anyone",
+    createdAt: "2026-09-22T10:00:00Z",
+    matches: [
+      { meetingId: "meeting-1", transcriptLineId: "t1-13" },
+      { meetingId: "meeting-3", transcriptLineId: "t3-4" },
+    ],
+  },
+  {
+    id: "alert-3",
+    keyword: "pricing",
+    name: "Pricing Discussions",
+    scope: "team",
+    createdAt: "2026-09-23T15:20:00Z",
+    matches: [
+      { meetingId: "meeting-1", transcriptLineId: "t1-15" },
+      { meetingId: "meeting-1", transcriptLineId: "t1-16" },
+    ],
+  },
+];
+
+// Client-side storage helpers for Playlists
+export function getStoredPlaylists(): Playlist[] {
+  if (typeof window === "undefined") return mockPlaylists;
+  try {
+    const raw = localStorage.getItem("fathom_playlists");
+    if (!raw) {
+      localStorage.setItem("fathom_playlists", JSON.stringify(mockPlaylists));
+      return mockPlaylists;
+    }
+    return JSON.parse(raw);
+  } catch {
+    return mockPlaylists;
+  }
+}
+
+export function saveStoredPlaylist(playlist: Playlist): Playlist[] {
+  if (typeof window === "undefined") return [playlist];
+  try {
+    const current = getStoredPlaylists();
+    const existingIndex = current.findIndex((p) => p.id === playlist.id);
+    let updated: Playlist[];
+    if (existingIndex >= 0) {
+      updated = [...current];
+      updated[existingIndex] = playlist;
+    } else {
+      updated = [playlist, ...current];
+    }
+    localStorage.setItem("fathom_playlists", JSON.stringify(updated));
+    return updated;
+  } catch {
+    return [playlist];
+  }
+}
+
+export function addHighlightToStoredPlaylist(
+  playlistId: string,
+  meetingId: string,
+  highlightId: string
+): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const current = getStoredPlaylists();
+    const pl = current.find((p) => p.id === playlistId);
+    if (!pl) return false;
+    const exists = pl.highlightRefs.some(
+      (ref) => ref.meetingId === meetingId && ref.highlightId === highlightId
+    );
+    if (!exists) {
+      pl.highlightRefs.push({ meetingId, highlightId });
+      localStorage.setItem("fathom_playlists", JSON.stringify(current));
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// Client-side storage helpers for Alerts
+export function getStoredAlerts(): Alert[] {
+  if (typeof window === "undefined") return mockAlerts;
+  try {
+    const raw = localStorage.getItem("fathom_alerts");
+    if (!raw) {
+      localStorage.setItem("fathom_alerts", JSON.stringify(mockAlerts));
+      return mockAlerts;
+    }
+    return JSON.parse(raw);
+  } catch {
+    return mockAlerts;
+  }
+}
+
+export function saveStoredAlert(alert: Alert): Alert[] {
+  if (typeof window === "undefined") return [alert];
+  try {
+    const current = getStoredAlerts();
+    const updated = [alert, ...current];
+    localStorage.setItem("fathom_alerts", JSON.stringify(updated));
+    return updated;
+  } catch {
+    return [alert];
+  }
+}
+
+export function deleteStoredAlert(alertId: string): Alert[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const current = getStoredAlerts();
+    const updated = current.filter((a) => a.id !== alertId);
+    localStorage.setItem("fathom_alerts", JSON.stringify(updated));
+    return updated;
+  } catch {
+    return [];
+  }
+}
+
