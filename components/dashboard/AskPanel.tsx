@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   ArrowUp,
   ChevronDown,
-  Sidebar,
+  Sparkles,
   Bot,
   ExternalLink,
   Loader2,
@@ -105,43 +105,45 @@ export default function AskPanel() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-surface text-text-primary">
+    <div className="h-full flex flex-col bg-[#0A0C12] text-white">
       {/* Top Header Bar */}
-      <div className="h-12 px-4 border-b border-border-subtle flex items-center justify-between bg-surface shrink-0">
-        <div className="flex items-center gap-2">
-          <Bot className="w-3.5 h-3.5 text-text-muted" />
-          <span className="text-xs font-semibold text-text-primary">
-            Ask Fanthom
+      <div className="h-14 px-5 border-b border-[#1A1D2E] flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#00E5FF]/20 to-[#7C3AED]/20 border border-[#00E5FF]/30 flex items-center justify-center">
+            <Sparkles className="w-3.5 h-3.5 text-[#00E5FF]" />
+          </div>
+          <span className="text-sm font-semibold text-white">
+            Ask Fathom
           </span>
         </div>
 
-        <button className="text-text-muted hover:text-text-primary transition-colors">
-          <Sidebar className="w-4 h-4" />
-        </button>
+        <span className="text-[10px] text-[#555869] bg-[#12141D] border border-[#1E2030] rounded-md px-2 py-0.5 font-medium">
+          AI
+        </span>
       </div>
 
       {/* Account-level Notice Banner */}
-      <div className="p-3 bg-surface-elevated border-b border-border-subtle text-text-secondary text-xs leading-normal shrink-0">
+      <div className="px-5 py-3 bg-[#0D0F14] border-b border-[#1A1D2E] text-[#8E92A6] text-xs leading-relaxed shrink-0">
         <p>
-          <span className="font-medium text-text-primary">Account-level search: </span>
+          <span className="font-medium text-[#C5C8D8]">Account-level search:</span>{" "}
           Synthesizing insights across all meeting transcripts and summaries.
         </p>
       </div>
 
       {/* Chat scrollable message area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-5 space-y-4">
         {exchanges.length === 0 && !isLoading ? (
           /* Empty state */
-          <div className="h-full flex flex-col items-center justify-center text-center space-y-2.5 p-4 my-auto">
-            <div className="w-8 h-8 rounded-md bg-surface-elevated border border-border-muted flex items-center justify-center text-text-muted">
-              <Bot className="w-4 h-4" />
+          <div className="h-full flex flex-col items-center justify-center text-center space-y-4 p-4 my-auto">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#00E5FF]/10 to-[#7C3AED]/10 border border-[#1E2030] flex items-center justify-center">
+              <Bot className="w-5 h-5 text-[#00E5FF]" />
             </div>
-            <div className="space-y-1 max-w-[240px]">
-              <p className="text-xs font-medium text-text-primary">
+            <div className="space-y-1.5 max-w-[260px]">
+              <p className="text-sm font-semibold text-white">
                 Ask anything across calls
               </p>
-              <p className="text-[11px] text-text-muted leading-normal">
-                Answers are synthesized directly from your call transcripts with citations.
+              <p className="text-xs text-[#8E92A6] leading-relaxed">
+                Answers are synthesized from your call transcripts with citations.
               </p>
             </div>
           </div>
@@ -149,30 +151,30 @@ export default function AskPanel() {
           /* Exchanges thread */
           <>
             {exchanges.map((ex) => (
-              <div key={ex.id} className="space-y-2">
+              <div key={ex.id} className="space-y-3">
                 {/* User Question Bubble */}
                 <div className="flex justify-end">
-                  <div className="max-w-[85%] rounded-md bg-accent text-white px-3 py-2 text-xs leading-normal">
+                  <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-[#00E5FF] text-[#050608] px-4 py-2.5 text-sm font-medium leading-relaxed">
                     {ex.question}
                   </div>
                 </div>
 
                 {/* AI Answer Bubble */}
-                <div className="flex items-start gap-2">
-                  <div className="w-5 h-5 rounded-md bg-surface-elevated border border-border-muted flex items-center justify-center shrink-0 mt-0.5 text-text-muted">
+                <div className="flex items-start gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-[#12141D] border border-[#1E2030] flex items-center justify-center shrink-0 mt-0.5">
                     {ex.isError ? (
-                      <AlertCircle className="w-3 h-3 text-status-danger" />
+                      <AlertCircle className="w-3.5 h-3.5 text-[#FB7185]" />
                     ) : (
-                      <Bot className="w-3 h-3 text-text-secondary" />
+                      <Bot className="w-3.5 h-3.5 text-[#00E5FF]" />
                     )}
                   </div>
 
-                  <div className="max-w-[85%] space-y-1.5">
+                  <div className="max-w-[85%] space-y-2">
                     <div
-                      className={`rounded-md p-3 text-xs leading-normal ${
+                      className={`rounded-2xl rounded-tl-sm p-4 text-sm leading-relaxed ${
                         ex.isError
-                          ? "bg-surface-elevated border border-border-muted text-text-secondary"
-                          : "bg-surface-elevated border border-border-muted text-text-primary"
+                          ? "bg-[#1A1012] border border-[#3A1520] text-[#FB7185]"
+                          : "bg-[#12141D] border border-[#1E2030] text-[#E4E5EB]"
                       }`}
                     >
                       <div className="whitespace-pre-wrap">{ex.answer}</div>
@@ -184,13 +186,13 @@ export default function AskPanel() {
                         {ex.sourceMeetingId ? (
                           <Link
                             href={`/meeting/${ex.sourceMeetingId}`}
-                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono bg-surface-elevated text-text-secondary hover:text-text-primary border border-border-muted transition-colors"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-[#12141D] text-[#8E92A6] hover:text-[#00E5FF] border border-[#1E2030] hover:border-[#00E5FF]/30 transition-all"
                           >
                             <span>From: {ex.sourceMeetingTitle}</span>
-                            <ExternalLink className="w-2.5 h-2.5" />
+                            <ExternalLink className="w-3 h-3" />
                           </Link>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono bg-surface-elevated text-text-muted border border-border-subtle">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-[#12141D] text-[#555869] border border-[#1A1D2E]">
                             From: {ex.sourceMeetingTitle}
                           </span>
                         )}
@@ -203,12 +205,12 @@ export default function AskPanel() {
 
             {/* Loading Indicator */}
             {isLoading && (
-              <div className="flex items-start gap-2">
-                <div className="w-5 h-5 rounded-md bg-surface-elevated border border-border-muted flex items-center justify-center shrink-0 text-text-muted">
-                  <Bot className="w-3 h-3" />
+              <div className="flex items-start gap-2.5">
+                <div className="w-7 h-7 rounded-lg bg-[#12141D] border border-[#1E2030] flex items-center justify-center shrink-0">
+                  <Bot className="w-3.5 h-3.5 text-[#00E5FF]" />
                 </div>
-                <div className="bg-surface-elevated border border-border-muted rounded-md px-3 py-2 flex items-center gap-2 text-xs text-text-secondary">
-                  <Loader2 className="w-3 h-3 animate-spin text-text-muted" />
+                <div className="bg-[#12141D] border border-[#1E2030] rounded-2xl rounded-tl-sm px-4 py-3 flex items-center gap-2.5 text-sm text-[#8E92A6]">
+                  <Loader2 className="w-4 h-4 animate-spin text-[#00E5FF]" />
                   <span>Searching archives...</span>
                 </div>
               </div>
@@ -218,13 +220,13 @@ export default function AskPanel() {
       </div>
 
       {/* Suggested Prompt Chips */}
-      <div className="px-3 py-2 border-t border-border-subtle bg-surface flex flex-col gap-1 shrink-0">
+      <div className="px-4 py-3 border-t border-[#1A1D2E] bg-[#0A0C12] flex flex-col gap-1.5 shrink-0">
         {suggestedPrompts.map((p, idx) => (
           <button
             key={idx}
             disabled={isLoading}
             onClick={() => handleAsk(p)}
-            className="w-full text-left text-xs px-2.5 py-1.5 rounded-md bg-surface-elevated hover:bg-surface-active border border-border-muted text-text-secondary hover:text-text-primary transition-colors truncate disabled:opacity-50"
+            className="w-full text-left text-xs px-3 py-2 rounded-lg bg-[#12141D] hover:bg-[#1C1E2A] border border-[#1E2030] hover:border-[#353950] text-[#8E92A6] hover:text-white transition-all truncate disabled:opacity-50"
           >
             {p}
           </button>
@@ -232,18 +234,18 @@ export default function AskPanel() {
       </div>
 
       {/* Pinned Input Row */}
-      <div className="p-3 border-t border-border-subtle bg-surface space-y-2 shrink-0">
+      <div className="p-4 border-t border-[#1A1D2E] bg-[#0A0C12] space-y-2.5 shrink-0">
         <div className="relative inline-block">
           <button
             onClick={() => setShowScopeDropdown(!showScopeDropdown)}
-            className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-surface-elevated border border-border-muted text-[11px] font-medium text-text-secondary hover:text-text-primary transition-colors"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#12141D] border border-[#1E2030] text-xs font-medium text-[#8E92A6] hover:text-white hover:border-[#353950] transition-all"
           >
             <span>{scope}</span>
-            <ChevronDown className="w-3 h-3 text-text-muted" />
+            <ChevronDown className="w-3 h-3" />
           </button>
 
           {showScopeDropdown && (
-            <div className="absolute bottom-full left-0 mb-1 w-32 bg-surface-elevated border border-border-strong rounded-md py-1 z-20 text-xs">
+            <div className="absolute bottom-full left-0 mb-1.5 w-36 bg-[#12141D] border border-[#353950] rounded-xl py-1.5 z-20 text-xs shadow-xl shadow-black/40">
               {["My calls", "All meetings", "This week"].map((item) => (
                 <button
                   key={item}
@@ -251,9 +253,10 @@ export default function AskPanel() {
                     setScope(item);
                     setShowScopeDropdown(false);
                   }}
-                  className={`w-full text-left px-2.5 py-1 hover:bg-surface-active ${
-                    scope === item ? "text-text-primary font-medium" : "text-text-secondary"
+                  className={`w-full text-left px-3 py-2 hover:bg-[#1C1E2A] rounded-lg mx-0.5 transition-colors ${
+                    scope === item ? "text-white font-medium" : "text-[#8E92A6]"
                   }`}
+                  style={{ width: "calc(100% - 4px)" }}
                 >
                   {item}
                 </button>
@@ -276,19 +279,19 @@ export default function AskPanel() {
             value={input}
             disabled={isLoading}
             onChange={(e) => setInput(e.target.value)}
-            className="w-full pl-3 pr-9 py-2 bg-surface-elevated border border-border-muted rounded-md text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors disabled:opacity-50"
+            className="w-full pl-4 pr-12 py-3 bg-[#12141D] border border-[#1E2030] rounded-xl text-sm text-white placeholder:text-[#555869] focus:outline-none focus:border-[#00E5FF]/50 transition-all disabled:opacity-50"
           />
 
           <button
             type="submit"
             disabled={!input.trim() || isLoading}
-            className={`absolute right-1.5 w-6 h-6 rounded-md flex items-center justify-center transition-colors ${
+            className={`absolute right-2 w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
               input.trim() && !isLoading
-                ? "bg-accent hover:bg-accent-hover text-white cursor-pointer"
-                : "bg-surface text-text-muted cursor-not-allowed border border-border-subtle"
+                ? "bg-[#00E5FF] hover:bg-[#38EDFF] text-[#050608] cursor-pointer shadow-md shadow-[#00E5FF]/20"
+                : "bg-[#1A1D2E] text-[#555869] cursor-not-allowed"
             }`}
           >
-            <ArrowUp className="w-3.5 h-3.5 stroke-[2]" />
+            <ArrowUp className="w-4 h-4 stroke-[2.5]" />
           </button>
         </form>
       </div>

@@ -50,14 +50,20 @@ export default function MeetingCardGrid({
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       {Object.entries(grouped).map(([monthYear, groupMeetings]) => (
-        <div key={monthYear} className="space-y-3">
-          <h2 className="text-xs font-semibold text-text-secondary uppercase tracking-wider">
-            {monthYear}
-          </h2>
+        <div key={monthYear} className="space-y-5">
+          <div className="flex items-center gap-3">
+            <h2 className="text-sm font-semibold text-white tracking-tight">
+              {monthYear}
+            </h2>
+            <div className="flex-1 h-px bg-[#1E2030]" />
+            <span className="text-xs text-[#555869] font-medium">
+              {groupMeetings.length} {groupMeetings.length === 1 ? "meeting" : "meetings"}
+            </span>
+          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {groupMeetings.map((meeting) => (
               <MeetingCard key={meeting.id} meeting={meeting} />
             ))}

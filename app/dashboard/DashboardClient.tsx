@@ -15,7 +15,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
   const [activeTab, setActiveTab] = useState("my-calls");
 
   return (
-    <div className="h-screen w-screen bg-[#050608] text-text-primary flex flex-col overflow-hidden font-sans select-none">
+    <div className="h-screen w-screen bg-[#050608] text-white flex flex-col overflow-hidden font-sans select-none">
       {/* Top Navigation Bar with Search, User info, and Log out */}
       <TopNav
         user={user}
@@ -27,10 +27,13 @@ export default function DashboardClient({ user }: DashboardClientProps) {
 
       {/* Main Two-Column Viewport */}
       <div className="flex-1 flex overflow-hidden relative">
-        {/* Left / Main Column: Scrollable Meeting Grid with Starry Background */}
-        <main className="relative flex-[70] h-full overflow-y-auto p-6 md:p-8 bg-[#050608]">
+        {/* Left / Main Column: Scrollable Meeting Grid */}
+        <main className="relative flex-[70] h-full overflow-y-auto bg-[#050608]">
+          {/* Ambient top glow */}
+          <div className="pointer-events-none absolute top-0 left-0 right-0 h-[300px] bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(0,229,255,0.04),transparent_70%)]" />
+
           {/* Subtle Starfield background */}
-          <div className="absolute inset-0 pointer-events-none opacity-30">
+          <div className="absolute inset-0 pointer-events-none opacity-20">
             <div
               className="w-full h-full"
               style={{
@@ -48,7 +51,17 @@ export default function DashboardClient({ user }: DashboardClientProps) {
             />
           </div>
 
-          <div className="relative z-10">
+          <div className="relative z-10 p-6 lg:p-8">
+            {/* Welcome Header */}
+            <div className="mb-8">
+              <h1 className="text-2xl font-bold text-white tracking-tight">
+                Your Meetings
+              </h1>
+              <p className="text-sm text-[#8E92A6] mt-1">
+                {mockMeetings.length} recorded meetings · All AI-powered summaries ready
+              </p>
+            </div>
+
             <MeetingCardGrid
               meetings={mockMeetings}
               searchQuery={searchQuery}
@@ -57,8 +70,8 @@ export default function DashboardClient({ user }: DashboardClientProps) {
           </div>
         </main>
 
-        {/* Right Column: Persistent Ask Fanthom Panel */}
-        <aside className="flex-[30] min-w-[320px] max-w-[400px] h-full overflow-hidden flex flex-col shrink-0 border-l border-border-subtle bg-[#0D0E14] z-10">
+        {/* Right Column: Persistent Ask Fathom Panel */}
+        <aside className="flex-[30] min-w-[340px] max-w-[420px] h-full overflow-hidden flex flex-col shrink-0 border-l border-[#1A1D2E] bg-[#0A0C12] z-10">
           <AskPanel />
         </aside>
       </div>

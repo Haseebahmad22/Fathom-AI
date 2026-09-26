@@ -57,6 +57,7 @@ export interface Meeting {
   title: string;
   date: string;
   durationMinutes: number;
+  thumbnail?: string;
   participants: Participant[];
   transcript: TranscriptLine[];
   summary: SummaryBullet[];
@@ -79,6 +80,7 @@ export const mockMeetings: Meeting[] = [
     title: "Sales call with Acme Corp",
     date: "2026-09-22T14:00:00Z",
     durationMinutes: 30,
+    thumbnail: "/images/thumb_sales.jpg",
     participants: [
       {
         name: "Alex Morgan",
@@ -323,6 +325,7 @@ export const mockMeetings: Meeting[] = [
     title: "Weekly Team Standup",
     date: "2026-09-24T09:30:00Z",
     durationMinutes: 20,
+    thumbnail: "/images/thumb_standup.jpg",
     participants: [
       {
         name: "David Chen",
@@ -581,6 +584,7 @@ export const mockMeetings: Meeting[] = [
     title: "Client Onboarding — Northwind Inc",
     date: "2026-09-18T16:00:00Z",
     durationMinutes: 45,
+    thumbnail: "/images/thumb_onboarding.jpg",
     participants: [
       {
         name: "Elena Rostova",
@@ -832,6 +836,7 @@ export const mockMeetings: Meeting[] = [
     title: "1:1 with Manager",
     date: "2026-09-15T11:00:00Z",
     durationMinutes: 30,
+    thumbnail: "/images/thumb_oneone.jpg",
     participants: [
       {
         name: "Haseeb Ahmad",
@@ -1013,6 +1018,7 @@ export const mockMeetings: Meeting[] = [
     title: "Q3 Planning Sync",
     date: "2026-09-12T15:00:00Z",
     durationMinutes: 60,
+    thumbnail: "/images/thumb_planning.jpg",
     participants: [
       {
         name: "Liam Parker",

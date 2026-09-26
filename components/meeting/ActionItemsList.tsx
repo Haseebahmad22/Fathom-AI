@@ -51,24 +51,24 @@ export default function ActionItemsList({
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       {/* Section Header */}
       <div className="flex items-center justify-between">
-        <h4 className="text-xs font-semibold text-text-secondary">
+        <h4 className="text-xs font-semibold text-[#8E92A6] uppercase tracking-wider">
           Action items
         </h4>
-        <span className="text-[11px] font-mono text-text-muted">
-          {items.filter((i) => i.isDone).length}/{items.length} done
+        <span className="text-xs font-medium text-[#555869] bg-[#12141D] border border-[#1E2030] rounded-lg px-2 py-0.5">
+          {items.filter((i) => i.isDone).length}/{items.length}
         </span>
       </div>
 
-      {/* Extract Button: clean secondary outline */}
+      {/* Extract Button */}
       <button
         onClick={handleExtract}
         disabled={isExtracting}
-        className="w-full py-1.5 px-3 rounded-md bg-surface-elevated hover:bg-surface-active border border-border-muted text-xs font-medium text-text-primary flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
+        className="w-full py-2 px-3 rounded-xl bg-[#12141D] hover:bg-[#1C1E2A] border border-[#1E2030] hover:border-[#353950] text-xs font-medium text-white flex items-center justify-center gap-2 transition-all disabled:opacity-50"
       >
-        <Bot className="w-3.5 h-3.5 text-text-muted" />
+        <Bot className="w-3.5 h-3.5 text-[#00E5FF]" />
         <span>
           {isExtracting ? "Extracting..." : "Re-extract from transcript"}
         </span>
@@ -80,46 +80,46 @@ export default function ActionItemsList({
           <div
             key={item.id}
             onClick={() => toggleDone(item.id)}
-            className={`p-2.5 rounded-md border transition-colors cursor-pointer flex items-start gap-2.5 ${
+            className={`p-3.5 rounded-xl border transition-all cursor-pointer flex items-start gap-3 ${
               item.isDone
-                ? "bg-surface-elevated border-border-subtle opacity-60"
-                : "bg-surface border-border-muted hover:border-border-strong"
+                ? "bg-[#0A0C12] border-[#1A1D2E] opacity-60"
+                : "bg-[#12141D] border-[#1E2030] hover:border-[#353950]"
             }`}
           >
             {/* Custom Checkbox */}
             <div
-              className={`w-3.5 h-3.5 rounded-sm border flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
+              className={`w-4 h-4 rounded flex items-center justify-center shrink-0 mt-0.5 transition-all ${
                 item.isDone
-                  ? "bg-accent border-accent text-white"
-                  : "border-border-strong bg-surface"
+                  ? "bg-[#00E5FF] border-[#00E5FF]"
+                  : "border-2 border-[#353950] bg-transparent"
               }`}
             >
-              {item.isDone && <Check className="w-2.5 h-2.5 stroke-[2.5]" />}
+              {item.isDone && <Check className="w-3 h-3 stroke-[3] text-[#050608]" />}
             </div>
 
             {/* Content & Metadata */}
             <div className="flex-1 min-w-0">
               <p
-                className={`text-xs leading-normal transition-colors ${
+                className={`text-sm leading-relaxed transition-colors ${
                   item.isDone
-                    ? "line-through text-text-muted"
-                    : "text-text-primary"
+                    ? "line-through text-[#555869]"
+                    : "text-[#E4E5EB]"
                 }`}
               >
                 {item.text}
               </p>
 
               {(item.assignee || item.dueDate) && (
-                <div className="flex items-center gap-2 mt-1.5 text-[11px] font-mono text-text-muted">
+                <div className="flex items-center gap-3 mt-2 text-xs text-[#555869]">
                   {item.assignee && (
                     <span className="inline-flex items-center gap-1">
-                      <UserIcon className="w-2.5 h-2.5" />
+                      <UserIcon className="w-3 h-3" />
                       {item.assignee}
                     </span>
                   )}
                   {item.dueDate && (
                     <span className="inline-flex items-center gap-1">
-                      <Calendar className="w-2.5 h-2.5" />
+                      <Calendar className="w-3 h-3" />
                       {item.dueDate}
                     </span>
                   )}
@@ -139,18 +139,18 @@ export default function ActionItemsList({
             value={newItemText}
             onChange={(e) => setNewItemText(e.target.value)}
             autoFocus
-            className="flex-1 px-2.5 py-1 bg-surface-elevated border border-border-muted rounded-md text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent"
+            className="flex-1 px-3.5 py-2 bg-[#12141D] border border-[#1E2030] rounded-xl text-sm text-white placeholder:text-[#555869] focus:outline-none focus:border-[#00E5FF]/50"
           />
           <button
             type="submit"
-            className="px-3 py-1 bg-accent hover:bg-accent-hover text-white text-xs font-medium rounded-md transition-colors"
+            className="px-4 py-2 bg-[#00E5FF] hover:bg-[#38EDFF] text-[#050608] text-xs font-semibold rounded-xl transition-all"
           >
             Add
           </button>
           <button
             type="button"
             onClick={() => setIsAdding(false)}
-            className="px-2 py-1 text-xs text-text-muted hover:text-text-primary transition-colors"
+            className="px-3 py-2 text-xs text-[#555869] hover:text-white transition-colors"
           >
             Cancel
           </button>
@@ -158,7 +158,7 @@ export default function ActionItemsList({
       ) : (
         <button
           onClick={() => setIsAdding(true)}
-          className="flex items-center gap-1.5 text-xs font-normal text-text-muted hover:text-text-primary transition-colors pt-1"
+          className="flex items-center gap-1.5 text-xs font-medium text-[#555869] hover:text-[#00E5FF] transition-colors pt-1"
         >
           <Plus className="w-3.5 h-3.5" />
           <span>Add action item</span>
