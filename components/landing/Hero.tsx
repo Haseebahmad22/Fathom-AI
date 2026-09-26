@@ -1,168 +1,333 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Play, Bookmark, Check } from "lucide-react";
+import Image from "next/image";
+import {
+  Lock,
+  Star,
+  Headphones,
+  Video,
+  FileText,
+  Sparkles,
+  Mic,
+  ArrowUp,
+} from "lucide-react";
 
 export default function Hero() {
+  const [audioMode, setAudioMode] = useState<"video" | "audio" | "transcript">("audio");
+
   return (
-    <section className="bg-app text-text-primary pt-16 pb-20 border-b border-border-subtle">
-      <div className="max-w-6xl mx-auto px-6 flex flex-col items-center text-center">
-        {/* Eyebrow badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-surface-elevated border border-border-muted text-xs font-medium text-text-secondary mb-6">
-          <span>The AI notetaker built for independent operators</span>
-        </div>
+    <section className="relative bg-[#050608] text-white pt-14 pb-20 overflow-hidden select-none">
+      {/* Canvas-style animated starfield via CSS */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div
+          className="absolute inset-0 opacity-60"
+          style={{
+            backgroundImage: `
+              radial-gradient(1.2px 1.2px at 25px 35px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1px 1px at 85px 140px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1.5px 1.5px at 160px 70px, rgba(255,255,255,0.8), rgba(0,0,0,0)),
+              radial-gradient(1px 1px at 230px 210px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1.5px 1.5px at 340px 120px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1px 1px at 450px 260px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1.8px 1.8px at 540px 80px, rgba(255,255,255,0.7), rgba(0,0,0,0)),
+              radial-gradient(1px 1px at 630px 190px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1.5px 1.5px at 720px 310px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1px 1px at 830px 95px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1.5px 1.5px at 910px 230px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1px 1px at 1000px 150px, rgba(255,255,255,0.6), rgba(0,0,0,0)),
+              radial-gradient(1.8px 1.8px at 1080px 45px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1px 1px at 1170px 280px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1px 1px at 1260px 170px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1.5px 1.5px at 1350px 85px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1px 1px at 1440px 240px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1.8px 1.8px at 1530px 120px, rgba(255,255,255,0.7), rgba(0,0,0,0)),
+              radial-gradient(1px 1px at 1600px 300px, #ffffff, rgba(0,0,0,0))
+            `,
+            backgroundRepeat: "repeat",
+            backgroundSize: "600px 380px",
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-35"
+          style={{
+            backgroundImage: `
+              radial-gradient(1px 1px at 50px 80px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1.5px 1.5px at 190px 250px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1px 1px at 380px 40px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1.5px 1.5px at 510px 310px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1px 1px at 670px 150px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1.5px 1.5px at 850px 370px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1px 1px at 1020px 70px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1.5px 1.5px at 1190px 220px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1px 1px at 1390px 340px, #ffffff, rgba(0,0,0,0)),
+              radial-gradient(1.5px 1.5px at 1520px 180px, #ffffff, rgba(0,0,0,0))
+            `,
+            backgroundRepeat: "repeat",
+            backgroundSize: "850px 520px",
+          }}
+        />
+      </div>
 
-        {/* Selected Hero Headline */}
-        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-text-primary max-w-3xl leading-tight">
-          Stay present in client calls. Let AI run the follow-up.
-        </h1>
+      <div className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center min-h-[520px]">
+          {/* Left Column: Headlines & CTA */}
+          <div className="lg:col-span-5 space-y-6 text-left">
+            <h1 className="text-[52px] sm:text-[64px] lg:text-[76px] tracking-[-0.03em] text-white leading-[1.05] font-sans">
+              <span className="font-normal">AI notetaking</span>{" "}
+              <span className="font-bold">that is</span>
+              <br />
+              <span className="font-bold">out of this world</span>
+            </h1>
 
-        {/* Sub-headline */}
-        <p className="mt-4 text-sm sm:text-base text-text-secondary max-w-xl leading-normal">
-          Automatic call transcription, instant recaps, and structured client follow-up emails — so you can stop taking notes and start executing.
-        </p>
+            <p className="text-base sm:text-lg text-[#9EA1B2] max-w-lg leading-relaxed">
+              Fathom summarizes your meetings so you can focus on the conversation.{" "}
+              <strong className="text-white font-semibold">Now available bot-free.</strong>
+            </p>
 
-        {/* Primary CTA */}
-        <div className="mt-8 flex flex-col sm:flex-row items-center gap-3">
-          <Link
-            href="/signup"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-md bg-accent hover:bg-accent-hover text-white text-xs font-medium transition-colors"
-          >
-            <span>Get started free</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-          <Link
-            href="/dashboard"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-md bg-transparent hover:bg-surface-elevated border border-border-muted text-text-primary text-xs font-medium transition-colors"
-          >
-            <span>View live demo</span>
-          </Link>
-        </div>
+            <div className="pt-1">
+              <Link
+                href="/signup"
+                className="inline-flex items-center justify-center px-9 py-4 rounded-full bg-gradient-to-r from-[#00E5FF] via-[#00D4EA] to-[#00C4D6] hover:from-[#38EDFF] hover:via-[#38E0F0] hover:to-[#38D5E0] text-[#050608] text-xs font-black tracking-wider uppercase transition-all shadow-[0_0_28px_rgba(0,229,255,0.35)] hover:shadow-[0_0_40px_rgba(0,229,255,0.55)]"
+              >
+                GET STARTED - FREE FOREVER
+              </Link>
+            </div>
 
-        {/* Trust Row */}
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-5 text-xs text-text-muted">
-          <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-3.5 h-3.5 text-text-secondary" />
-            <span>No credit card required</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-3.5 h-3.5 text-text-secondary" />
-            <span>Works with Zoom, Meet & Teams</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-3.5 h-3.5 text-text-secondary" />
-            <span>Free forever for individuals</span>
-          </div>
-        </div>
-
-        {/* Utilitarian Mock Interface Card */}
-        <div className="mt-12 w-full max-w-4xl rounded-lg bg-surface border border-border-muted overflow-hidden text-left">
-          {/* Mock Window Header */}
-          <div className="flex items-center justify-between px-4 py-2.5 border-b border-border-subtle bg-surface-elevated">
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-border-strong" />
-              <span className="w-2.5 h-2.5 rounded-full bg-border-strong" />
-              <span className="w-2.5 h-2.5 rounded-full bg-border-strong" />
-              <span className="ml-2 text-[11px] font-mono text-text-muted">
-                fathom.video/recording/client-sync
+            {/* Compliance row */}
+            <div className="flex items-center gap-2 text-xs text-[#727586] pt-1">
+              <Lock className="w-3.5 h-3.5 text-[#727586]" />
+              <span className="font-medium tracking-wide">
+                SOC 2 Type II &nbsp;|&nbsp; GDPR &nbsp;|&nbsp; HIPAA Compliant &nbsp;|&nbsp; SSO / SCIM
               </span>
             </div>
-            <span className="text-[11px] font-medium text-text-secondary bg-surface px-2 py-0.5 rounded-md border border-border-subtle">
-              Processed in 28s
-            </span>
           </div>
 
-          {/* Two-Column Mock Product Interface */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-0 divide-y md:divide-y-0 md:divide-x divide-border-subtle min-h-[340px]">
-            {/* Left Column: Video Mockup + Transcript */}
-            <div className="md:col-span-7 p-4 flex flex-col gap-3">
-              {/* Mini Video Strip */}
-              <div className="relative aspect-[16/8] rounded-md bg-app border border-border-subtle p-2 flex items-center justify-center overflow-hidden">
-                <div className="grid grid-cols-2 gap-2 w-full h-full">
-                  <div className="rounded-md bg-surface border border-border-muted flex items-center justify-center text-xs font-medium text-text-secondary">
-                    You (Host)
-                  </div>
-                  <div className="rounded-md bg-surface border border-border-muted flex items-center justify-center text-xs font-medium text-text-secondary">
-                    Sarah (Client)
-                  </div>
-                </div>
-                <div className="absolute bottom-2 left-3 flex items-center gap-1.5 text-[10px] bg-app/90 border border-border-subtle px-2 py-0.5 rounded-md text-text-secondary font-mono">
-                  <Play className="w-3 h-3 text-text-primary fill-current" />
-                  <span>0:14 / 28:40</span>
-                </div>
-              </div>
-
-              {/* Mock Chat Transcript */}
-              <div className="flex-1 rounded-md bg-surface-elevated border border-border-subtle p-3 space-y-2">
-                <div className="flex items-center justify-between text-xs text-text-muted">
-                  <span className="font-medium text-text-primary">
-                    Sarah Jenkins
-                  </span>
-                  <span className="font-mono text-[11px]">0:28</span>
-                </div>
-                <div className="p-2.5 rounded-md bg-surface border border-border-subtle text-xs text-text-secondary leading-normal">
-                  "We want to start with a 15-seat pilot before signing the full annual enterprise agreement. Can you send the onboarding summary by tomorrow?"
-                </div>
-
-                <div className="py-1.5 px-2.5 rounded-md bg-surface border border-border-subtle flex items-center gap-2 text-xs">
-                  <Bookmark className="w-3 h-3 text-text-muted" />
-                  <span className="font-medium text-text-primary">Key commitment:</span>
-                  <span className="text-text-secondary truncate">
-                    Deliver pilot onboarding summary by Friday 5 PM
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column: AI Action Items & One-Click Follow-up */}
-            <div className="md:col-span-5 p-4 flex flex-col justify-between bg-surface">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between pb-1 border-b border-border-subtle">
-                  <span className="text-xs font-semibold text-text-primary">
-                    Action items
-                  </span>
-                  <span className="text-[11px] font-mono text-text-muted">
-                    1 of 2 done
-                  </span>
-                </div>
-
-                <div className="space-y-2 text-xs">
-                  <div className="p-2 rounded-md bg-surface-elevated border border-border-subtle flex items-start gap-2">
-                    <div className="w-3.5 h-3.5 rounded-sm border border-border-strong bg-surface mt-0.5 shrink-0" />
-                    <span className="text-text-primary text-xs leading-normal">
-                      Send SOC 2 report and pilot access link
-                    </span>
-                  </div>
-
-                  <div className="p-2 rounded-md bg-surface-elevated border border-border-subtle flex items-start gap-2">
-                    <div className="w-3.5 h-3.5 rounded-sm bg-accent text-white flex items-center justify-center mt-0.5 shrink-0">
-                      <Check className="w-2.5 h-2.5 stroke-[2.5]" />
-                    </div>
-                    <span className="text-text-muted line-through text-xs leading-normal">
-                      Review scope requirements in Notion
-                    </span>
+          {/* Right Column: Bento Card Canvas */}
+          <div className="lg:col-span-7 relative w-full min-h-[500px] flex items-center justify-center lg:justify-end">
+            <div className="relative w-full max-w-[700px] h-[480px]">
+              {/* ROW 1: Capture Settings Card + Ask Fathom Pill */}
+              {/* Capture Settings */}
+              <div
+                className="absolute top-0 left-4 z-10 w-[260px] rounded-[22px] p-3 text-xs shadow-xl backdrop-blur-md"
+                style={{
+                  background:
+                    "linear-gradient(#0D0F15, #0D0F15) padding-box, linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05)) border-box",
+                  border: "1px solid transparent",
+                }}
+              >
+                <div className="flex items-center justify-between pb-2 px-1">
+                  <span className="text-[11px] font-semibold text-white">Capture settings</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#00E5FF]" />
+                    <span className="text-[10px] text-[#00E5FF] font-mono">Ready</span>
                   </div>
                 </div>
-              </div>
 
-              {/* Hero Action: Draft Follow-up Email */}
-              <div className="mt-4 pt-3 border-t border-border-subtle">
-                <div className="p-3 rounded-md bg-surface-elevated border border-border-muted space-y-2">
-                  <div className="text-xs font-semibold text-text-primary">
-                    Draft follow-up email
-                  </div>
-                  <p className="text-xs text-text-secondary leading-normal">
-                    Email draft generated from call decisions and ready to review.
-                  </p>
-                  <button
-                    type="button"
-                    className="w-full py-1.5 rounded-md bg-accent hover:bg-accent-hover text-white text-xs font-medium transition-colors"
+                <div className="space-y-0.5 font-medium bg-[#141620]/90 rounded-xl p-1.5 border border-[#1E2030]">
+                  <div
+                    onClick={() => setAudioMode("audio")}
+                    className={`flex items-center justify-between px-2.5 py-2 rounded-lg cursor-pointer transition-colors ${
+                      audioMode === "audio" ? "bg-[#1C1F30] text-white" : "text-[#85889A] hover:text-white"
+                    }`}
                   >
-                    Open follow-up draft
+                    <div className="flex items-center gap-2">
+                      <Headphones className="w-3.5 h-3.5 text-[#00E5FF]" />
+                      <span className="text-[11px] font-semibold text-white">Audio</span>
+                    </div>
+                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#00E5FF]/20 text-[#00E5FF] font-bold">
+                      BOT-FREE
+                    </span>
+                  </div>
+
+                  <div
+                    onClick={() => setAudioMode("transcript")}
+                    className={`flex items-center justify-between px-2.5 py-2 rounded-lg cursor-pointer transition-colors ${
+                      audioMode === "transcript" ? "bg-[#1C1F30] text-white" : "text-[#85889A] hover:text-white"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <FileText className="w-3.5 h-3.5 opacity-60" />
+                      <span className="text-[11px]">Transcript only</span>
+                    </div>
+                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white/10 text-white/70 font-semibold">
+                      BOT-FREE
+                    </span>
+                  </div>
+
+                  <div
+                    onClick={() => setAudioMode("video")}
+                    className={`flex items-center gap-2 px-2.5 py-2 rounded-lg cursor-pointer transition-colors ${
+                      audioMode === "video" ? "bg-[#1C1F30] text-white" : "text-[#85889A] hover:text-white"
+                    }`}
+                  >
+                    <Video className="w-3.5 h-3.5 opacity-60" />
+                    <span className="text-[11px]">Audio & video</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* ASK FATHOM Pill */}
+              <div className="absolute top-4 right-0 z-10 px-7 py-3.5 rounded-full bg-[#0D0F15] border border-[#222536] flex items-center gap-2.5 shadow-xl hover:border-[#383C50] transition-colors">
+                <Sparkles className="w-4 h-4 text-[#00E5FF]" />
+                <span className="text-xs font-bold tracking-widest text-[#D2D5E4]">
+                  ASK FATHOM
+                </span>
+              </div>
+
+              {/* ROW 2: Astronaut + Chat Prompt */}
+              {/* Astronaut Capsule */}
+              <div className="absolute top-[165px] left-0 z-20 w-[260px] h-[130px] rounded-full bg-[#050608] border border-[#222536] p-1.5 flex items-center justify-center shadow-2xl overflow-hidden group hover:border-[#00E5FF]/40 transition-colors">
+                <div className="relative w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-black">
+                  <Image
+                    src="/images/space_astronaut_laptop.jpg"
+                    alt="Astronaut using laptop"
+                    fill
+                    className="object-cover object-center scale-110"
+                    priority
+                  />
+                </div>
+              </div>
+
+              {/* Chat Prompt Card */}
+              <div
+                className="absolute top-[165px] right-0 z-20 w-[390px] h-[130px] rounded-[26px] p-4 flex flex-col justify-between shadow-2xl backdrop-blur-md"
+                style={{
+                  background:
+                    "linear-gradient(#0D0F15, #0D0F15) padding-box, linear-gradient(135deg, rgba(249,115,22,0.5), rgba(236,72,153,0.4), rgba(168,85,247,0.3)) border-box",
+                  border: "1px solid transparent",
+                }}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <p className="text-xs sm:text-sm text-[#E5E7F4] leading-relaxed">
+                    Fathom, what follow-ups did I commit to in my meetings this week?
+                  </p>
+                  <div className="flex items-center gap-1 shrink-0 pt-0.5">
+                    <span className="w-5 h-5 rounded-full bg-[#1C1E2B] border border-[#2A2D3E] flex items-center justify-center text-[10px] text-white">
+                      ✦
+                    </span>
+                    <span className="w-5 h-5 rounded-full bg-[#1C1E2B] border border-[#2A2D3E] flex items-center justify-center text-[10px] text-[#F97316]">
+                      ✹
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-1 border-t border-[#1C1F2D]">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#181A25] border border-[#262838] text-[10px] text-[#A6AABF] font-medium">
+                    <span className="text-[#00E5FF] font-bold">▶</span>
+                    <span>Fathom</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 text-[#85889C]">
+                    <Mic className="w-3.5 h-3.5 hover:text-white cursor-pointer transition-colors" />
+                    <button
+                      type="button"
+                      aria-label="Send prompt"
+                      className="w-6 h-6 rounded-full bg-[#00E5FF] hover:bg-[#38EDFF] text-[#050608] flex items-center justify-center transition-all"
+                    >
+                      <ArrowUp className="w-3.5 h-3.5 stroke-[2.5]" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* ROW 3: Project check-in + Blue Planet */}
+              {/* Project check-in card */}
+              <div className="absolute top-[320px] left-8 z-20 w-[300px] rounded-[22px] bg-[#0D0F15] border border-[#222536] p-4 space-y-2 shadow-2xl backdrop-blur-md">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-white">Project check-in</span>
+                  <div className="flex -space-x-1.5">
+                    <span className="w-6 h-6 rounded-full bg-[#F59E0B] text-[9px] font-bold text-black flex items-center justify-center border-2 border-[#0D0F15]">
+                      L
+                    </span>
+                    <span className="w-6 h-6 rounded-full bg-[#F43F5E] text-[9px] font-bold text-white flex items-center justify-center border-2 border-[#0D0F15]">
+                      J
+                    </span>
+                    <span className="w-6 h-6 rounded-full bg-[#10B981] text-[9px] font-bold text-white flex items-center justify-center border-2 border-[#0D0F15]">
+                      A
+                    </span>
+                    <span className="w-6 h-6 rounded-full bg-[#3B82F6] text-[9px] font-bold text-white flex items-center justify-center border-2 border-[#0D0F15]">
+                      K
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 pt-2 border-t border-[#1C1E2A] text-xs">
+                  <button className="flex items-center gap-1.5 text-[#00E5FF] font-medium border-b-2 border-[#00E5FF] pb-1 -mb-1">
+                    <Sparkles className="w-3 h-3 text-[#00E5FF]" />
+                    <span>Summary</span>
+                  </button>
+                  <button className="text-[#6D7082] hover:text-white transition-colors pb-1 flex items-center gap-1.5">
+                    <span>✎</span>
+                    <span>Scratchpad</span>
                   </button>
                 </div>
               </div>
+
+              {/* Blue Planet */}
+              <div className="absolute top-[310px] right-8 z-10 w-[120px] h-[120px] rounded-full overflow-hidden shadow-[0_0_40px_rgba(0,216,246,0.5)] border border-[#00E5FF]/40">
+                <Image
+                  src="/images/blue_glowing_planet.jpg"
+                  alt="Glowing blue planet"
+                  width={120}
+                  height={120}
+                  className="object-cover w-full h-full scale-105"
+                  priority
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Social Proof & Logo Row */}
+        <div className="mt-20 pt-8 border-t border-[#151722]">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
+            {/* G2 Rating & Used at 300K+ companies */}
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-[#FF492C] flex items-center justify-center font-black text-white text-sm shadow-[0_0_12px_rgba(255,73,44,0.3)]">
+                  G²
+                </div>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <div className="flex items-center text-[#F59E0B]">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-3.5 h-3.5 fill-current" />
+                      ))}
+                    </div>
+                    <span className="font-bold text-white text-xs">5.0/5.0</span>
+                  </div>
+                  <div className="text-[11px] text-[#7E8296] font-medium">
+                    #1 rated · 6,500+ reviews
+                  </div>
+                </div>
+              </div>
+
+              <div className="hidden sm:block text-left border-l border-[#222536] pl-6">
+                <div className="text-[11px] text-[#7E8296] leading-none">Used at</div>
+                <div className="text-sm font-bold text-white">300K+</div>
+                <div className="text-[11px] text-[#7E8296] leading-none">companies</div>
+              </div>
+            </div>
+
+            {/* Brand Logo Cards — Glassmorphic pill style matching reference */}
+            <div className="flex flex-wrap items-center justify-center gap-3 text-xs">
+              {[
+                { name: "HubSpot", icon: "🔶" },
+                { name: "Adobe", icon: "Ai" },
+                { name: "_zapier", icon: null },
+                { name: "GRUBHUB", icon: "🍔" },
+                { name: "EA", icon: null },
+                { name: "Calendly", icon: "📅" },
+              ].map((brand) => (
+                <div
+                  key={brand.name}
+                  className="px-5 py-3 rounded-2xl bg-[#0D0F15]/80 border border-[#222536] hover:border-[#383C50] transition-colors flex items-center gap-2 min-h-[48px] backdrop-blur-sm"
+                >
+                  <span className="font-bold text-white tracking-tight text-sm font-sans">
+                    {brand.name}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         </div>

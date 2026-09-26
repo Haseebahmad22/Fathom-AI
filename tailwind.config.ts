@@ -37,14 +37,23 @@ const config: Config = {
       borderRadius: {
         sm: "6px",
         md: "6px",
-        lg: "8px",
-        xl: "8px",
+        lg: "12px",
+        xl: "16px",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
       },
       boxShadow: {
         none: "none",
+      },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0", transform: "translateY(12px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        fadeIn: "fadeIn 0.5s ease-out forwards",
       },
     },
   },

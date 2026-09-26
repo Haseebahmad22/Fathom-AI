@@ -2,31 +2,34 @@
 @config "../tailwind.config.ts";
 
 :root {
-  /* True dark background and flat panels */
-  --bg-app: #0A0B0E;
-  --bg-surface: #111318;
-  --bg-surface-elevated: #171922;
-  --bg-surface-active: #1E202B;
+  /* Base background: pitch-black space theme matching Fathom reference */
+  --bg-app: #050608;
+  --bg-surface: #0D0F14;
+  --bg-surface-elevated: #141620;
+  --bg-surface-active: #1C1E2A;
 
   /* Hairline 1px border tokens */
-  --border-subtle: #191B24;
-  --border-muted: #222532;
-  --border-strong: #313545;
+  --border-subtle: #151722;
+  --border-muted: #222536;
+  --border-strong: #353950;
 
   /* Typography color hierarchy */
   --text-primary: #F3F4F6;
-  --text-secondary: #9295A5;
+  --text-secondary: #9EA1B2;
   --text-muted: #5D6071;
 
-  /* Exactly ONE accent color (utilitarian indigo) */
-  --accent: #4E46DC;
-  --accent-hover: #433BC9;
-  --accent-subtle: rgba(78, 70, 220, 0.12);
-  --accent-text: #837DF0;
+  /* Accent: Fathom's signature cyan */
+  --accent: #00E5FF;
+  --accent-hover: #38EDFF;
+  --accent-subtle: rgba(0, 229, 255, 0.12);
+  --accent-text: #00D8F6;
 
-  /* Radii scale: 6px for small elements, 8px for containers */
+  /* Pillar section warm off-white */
+  --bg-pillar: #F4F1EA;
+
+  /* Radii scale */
   --radius-sm: 6px;
-  --radius-lg: 8px;
+  --radius-lg: 12px;
 }
 
 * {
@@ -46,4 +49,30 @@ input:focus-visible,
 textarea:focus-visible {
   outline: 1px solid var(--accent);
   outline-offset: 0;
+}
+
+/* Smooth fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Smooth waveform animation */
+@keyframes waveform {
+  0%, 100% { height: 14px; }
+  50% { height: 24px; }
+}
+
+@keyframes waveform2 {
+  0%, 100% { height: 20px; }
+  50% { height: 10px; }
+}
+
+@keyframes waveform3 {
+  0%, 100% { height: 10px; }
+  50% { height: 18px; }
 }
