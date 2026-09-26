@@ -47,39 +47,39 @@ export default function TranscriptPanel({
 
   return (
     <div className="flex flex-col h-full bg-[#050608] text-white">
-      {/* Top action bar: Search & Copy */}
-      <div className="px-6 py-3.5 flex items-center justify-between gap-4 border-b border-[#1A1D2E] bg-[#0A0C12]">
+      {/* Top action bar: Search & Copy - Compact */}
+      <div className="px-4 py-2 flex items-center justify-between gap-3 border-b border-[#1A1D2E] bg-[#0A0C12] shrink-0">
         <div className="relative flex-1 max-w-sm">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#555869]" />
+          <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#555869]" />
           <input
             type="text"
             placeholder="Search transcript..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-[#12141D] border border-[#1E2030] rounded-xl text-sm text-white placeholder:text-[#555869] focus:outline-none focus:border-[#00E5FF]/50 transition-all"
+            className="w-full pl-9 pr-3 py-1.5 bg-[#12141D] border border-[#1E2030] rounded-lg text-xs text-white placeholder:text-[#555869] focus:outline-none focus:border-[#00E5FF]/50 transition-all"
           />
         </div>
 
         <button
           onClick={copyFullTranscript}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#12141D] hover:bg-[#1C1E2A] border border-[#1E2030] hover:border-[#353950] text-xs font-medium text-[#8E92A6] hover:text-white transition-all"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#12141D] hover:bg-[#1C1E2A] border border-[#1E2030] hover:border-[#353950] text-xs font-medium text-[#8E92A6] hover:text-white transition-all cursor-pointer"
         >
           {copied ? (
             <>
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Copied</span>
+              <Check className="w-3 h-3 text-emerald-400" />
+              <span className="text-emerald-400">Copied</span>
             </>
           ) : (
             <>
-              <Copy className="w-3.5 h-3.5" />
+              <Copy className="w-3 h-3" />
               <span>Copy transcript</span>
             </>
           )}
         </button>
       </div>
 
-      {/* Transcript Dense Stream */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-3">
+      {/* Transcript Dense Stream with Custom Scrollbar */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-2 custom-scrollbar">
         {filteredLines.map((line, idx) => {
           const isHost = line.speakerName === primaryHost;
           const isCurrent =
@@ -93,19 +93,19 @@ export default function TranscriptPanel({
           );
 
           return (
-            <div key={line.id} className="space-y-2">
+            <div key={line.id} className="space-y-1.5">
               {/* Inline Bookmark banner if highlight matches */}
               {matchedHighlight && idx % 4 === 1 && (
                 <div
                   onClick={() => onSeek(matchedHighlight.timestampSeconds)}
-                  className="my-2 py-2 px-3.5 rounded-xl bg-[#12141D] border border-[#00E5FF]/20 flex items-center gap-2.5 cursor-pointer hover:border-[#00E5FF]/40 transition-all text-xs"
+                  className="my-1.5 py-1.5 px-3 rounded-lg bg-[#12141D] border border-[#00E5FF]/20 flex items-center gap-2 cursor-pointer hover:border-[#00E5FF]/40 transition-all text-xs"
                 >
-                  <Bookmark className="w-3.5 h-3.5 text-[#00E5FF] shrink-0" />
-                  <span className="font-semibold text-white">Highlight:</span>
-                  <span className="text-[#C5C8D8] truncate">
+                  <Bookmark className="w-3 h-3 text-[#00E5FF] shrink-0" />
+                  <span className="font-semibold text-white text-[11px]">Highlight:</span>
+                  <span className="text-[#C5C8D8] text-[11px] truncate">
                     {matchedHighlight.quoteText}
                   </span>
-                  <span className="text-[11px] font-mono text-[#555869] ml-auto shrink-0">
+                  <span className="text-[10px] font-mono text-[#555869] ml-auto shrink-0">
                     @{formatTime(matchedHighlight.timestampSeconds)}
                   </span>
                 </div>
@@ -114,22 +114,22 @@ export default function TranscriptPanel({
               {/* Speaker Row Container */}
               <div
                 onClick={() => onSeek(line.timestampSeconds)}
-                className={`p-4 rounded-xl border transition-all cursor-pointer group ${
+                className={`p-3 rounded-lg border transition-all cursor-pointer group ${
                   isCurrent
-                    ? "bg-[#12141D] border-[#00E5FF]/30 shadow-md shadow-[#00E5FF]/5"
+                    ? "bg-[#12141D] border-[#00E5FF]/30 shadow-sm shadow-[#00E5FF]/5"
                     : "bg-[#0A0C12] border-[#1A1D2E] hover:bg-[#12141D] hover:border-[#353950]"
                 }`}
               >
-                <div className="flex items-center justify-between text-xs mb-1.5">
+                <div className="flex items-center justify-between text-[11px] mb-1">
                   <span className={`font-semibold ${isCurrent ? "text-[#00E5FF]" : "text-[#C5C8D8]"}`}>
                     {line.speakerName} {isHost ? "(Host)" : ""}
                   </span>
-                  <span className="font-mono text-[11px] text-[#555869]">
+                  <span className="font-mono text-[10px] text-[#555869]">
                     {formatTime(line.timestampSeconds)}
                   </span>
                 </div>
 
-                <div className="text-sm leading-relaxed text-[#E4E5EB]">
+                <div className="text-xs leading-relaxed text-[#D8DAE5]">
                   {line.text}
                 </div>
               </div>

@@ -37,7 +37,6 @@ export default function SummarySidebar({
     weekday: "short",
     month: "short",
     day: "numeric",
-    year: "numeric",
   });
 
   const formattedTime = new Date(meeting.date).toLocaleTimeString("en-US", {
@@ -45,6 +44,18 @@ export default function SummarySidebar({
     minute: "2-digit",
     hour12: true,
   });
+
+  const thumbUrl =
+    meeting.thumbnail ||
+    (meeting.id === "meeting-2"
+      ? "/images/thumb_standup.jpg"
+      : meeting.id === "meeting-3"
+      ? "/images/thumb_onboarding.jpg"
+      : meeting.id === "meeting-4"
+      ? "/images/thumb_oneone.jpg"
+      : meeting.id === "meeting-5"
+      ? "/images/thumb_planning.jpg"
+      : "/images/thumb_sales.jpg");
 
   const handleCopyShareLink = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -55,120 +66,104 @@ export default function SummarySidebar({
 
   return (
     <div className="flex flex-col h-full bg-[#0A0C12] text-white">
-      {/* Top Header & Toolbar */}
-      <div className="p-6 border-b border-[#1A1D2E] space-y-4 shrink-0">
-        {/* Meeting Thumbnail Preview Card */}
-        <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden border border-[#1E2030] shadow-md group">
-          <img
-            src={
-              meeting.thumbnail ||
-              (meeting.id === "meeting-2"
-                ? "/images/thumb_standup.jpg"
-                : meeting.id === "meeting-3"
-                ? "/images/thumb_onboarding.jpg"
-                : meeting.id === "meeting-4"
-                ? "/images/thumb_oneone.jpg"
-                : meeting.id === "meeting-5"
-                ? "/images/thumb_planning.jpg"
-                : "/images/thumb_sales.jpg")
-            }
-            alt={meetingTitle}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0A0C12] via-black/20 to-transparent" />
-          <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm text-[10px] font-semibold text-[#00E5FF] border border-[#00E5FF]/20 flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] animate-pulse" />
-            <span>Recorded Call</span>
+      {/* Top Header & Toolbar - Space-efficient & Balanced */}
+      <div className="p-4 border-b border-[#1A1D2E] space-y-3 shrink-0">
+        {/* Compact Title Row with Meeting Thumbnail Preview */}
+        <div className="flex items-start gap-3">
+          <div className="relative w-14 h-10 rounded-lg overflow-hidden border border-[#1E2030] shrink-0 group shadow-sm mt-0.5">
+            <img
+              src={thumbUrl}
+              alt={meetingTitle}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+            />
+            <div className="absolute inset-0 bg-black/20" />
           </div>
-          <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm text-[10px] font-mono text-white">
-            {meeting.durationMinutes} min
+
+          <div className="flex-1 min-w-0">
+            {isEditingTitle ? (
+              <input
+                type="text"
+                value={meetingTitle}
+                onChange={(e) => setMeetingTitle(e.target.value)}
+                onBlur={() => setIsEditingTitle(false)}
+                onKeyDown={(e) => e.key === "Enter" && setIsEditingTitle(false)}
+                autoFocus
+                className="text-xs font-semibold bg-[#12141D] border border-[#00E5FF]/50 rounded-lg px-2 py-1 text-white w-full focus:outline-none"
+              />
+            ) : (
+              <div className="flex items-center gap-1.5 group">
+                <h2
+                  onClick={() => setIsEditingTitle(true)}
+                  className="text-xs font-semibold text-white hover:text-[#00E5FF] cursor-pointer transition-colors truncate"
+                  title="Click to edit title"
+                >
+                  {meetingTitle}
+                </h2>
+                <button
+                  onClick={() => setIsEditingTitle(true)}
+                  className="opacity-0 group-hover:opacity-100 text-[#555869] hover:text-white transition-opacity shrink-0"
+                >
+                  <Edit2 className="w-3 h-3" />
+                </button>
+              </div>
+            )}
+
+            <div className="flex items-center gap-2 mt-0.5 text-[10px] text-[#8E92A6]">
+              <span className="flex items-center gap-1">
+                <Calendar className="w-3 h-3 text-[#555869]" />
+                {formattedDate}
+              </span>
+              <span>·</span>
+              <span className="flex items-center gap-1">
+                <Clock className="w-3 h-3 text-[#555869]" />
+                {meeting.durationMinutes}m
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Title and Date */}
-        <div>
-          {isEditingTitle ? (
-            <input
-              type="text"
-              value={meetingTitle}
-              onChange={(e) => setMeetingTitle(e.target.value)}
-              onBlur={() => setIsEditingTitle(false)}
-              onKeyDown={(e) => e.key === "Enter" && setIsEditingTitle(false)}
-              autoFocus
-              className="text-lg font-semibold bg-[#12141D] border border-[#00E5FF]/50 rounded-xl px-3 py-2 text-white w-full focus:outline-none"
-            />
-          ) : (
-            <div className="flex items-center gap-2 group">
-              <h2
-                onClick={() => setIsEditingTitle(true)}
-                className="text-lg font-semibold tracking-tight text-white hover:text-[#00E5FF] cursor-pointer transition-colors"
-                title="Click to edit title"
-              >
-                {meetingTitle}
-              </h2>
-              <button
-                onClick={() => setIsEditingTitle(true)}
-                className="opacity-0 group-hover:opacity-100 text-[#555869] hover:text-white transition-opacity"
-              >
-                <Edit2 className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          )}
-
-          <div className="flex items-center gap-3 mt-2 text-xs text-[#8E92A6]">
-            <span className="flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-[#555869]" />
-              {formattedDate}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-[#555869]" />
-              {formattedTime} · {meeting.durationMinutes} min
-            </span>
-          </div>
-
-          {/* Participant chips */}
-          <div className="flex flex-wrap items-center gap-1.5 mt-3">
-            {meeting.participants.map((p, i) => (
+        {/* Participant chips */}
+        <div className="flex flex-wrap items-center gap-1">
+          {meeting.participants.map((p, i) => (
+            <span
+              key={i}
+              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#12141D] border border-[#1E2030] text-[10px] text-[#C5C8D8]"
+            >
               <span
-                key={i}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#12141D] border border-[#1E2030] text-xs text-[#C5C8D8]"
+                className="w-3.5 h-3.5 rounded-full flex items-center justify-center text-[7px] font-bold text-white shrink-0"
+                style={{ backgroundColor: p.avatarColor }}
               >
-                <span
-                  className="w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-bold text-white"
-                  style={{ backgroundColor: p.avatarColor }}
-                >
-                  {p.initials}
-                </span>
-                {p.name}
+                {p.initials}
               </span>
-            ))}
-          </div>
+              <span className="truncate max-w-[100px]">{p.name}</span>
+            </span>
+          ))}
         </div>
 
         {/* Primary Hero CTA: Draft Follow-up Email */}
-        <div className="space-y-2.5">
+        <div className="space-y-1.5 pt-1">
           <button
             onClick={() => setIsEmailModalOpen(true)}
-            className="w-full py-2.5 px-4 rounded-xl bg-[#00E5FF] hover:bg-[#38EDFF] text-[#050608] text-sm font-semibold flex items-center justify-center gap-2 transition-all shadow-md shadow-[#00E5FF]/20"
+            className="w-full py-1.5 px-3 rounded-lg bg-[#00E5FF] hover:bg-[#38EDFF] text-[#050608] text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-sm shadow-[#00E5FF]/20 cursor-pointer"
           >
-            <Mail className="w-4 h-4" />
+            <Mail className="w-3.5 h-3.5" />
             <span>Draft follow-up email</span>
           </button>
 
           {/* Secondary Actions: Share & Overflow */}
-          <div className="flex items-center gap-2 relative">
+          <div className="flex items-center gap-1.5 relative">
             <button
               onClick={handleCopyShareLink}
-              className="flex-1 py-2 px-3 rounded-xl bg-[#12141D] hover:bg-[#1C1E2A] border border-[#1E2030] hover:border-[#353950] text-sm font-medium text-white flex items-center justify-center gap-2 transition-all"
+              className="flex-1 py-1.5 px-2.5 rounded-lg bg-[#12141D] hover:bg-[#1C1E2A] border border-[#1E2030] hover:border-[#353950] text-xs font-medium text-white flex items-center justify-center gap-1.5 transition-all cursor-pointer"
             >
               {copiedLink ? (
                 <>
-                  <Check className="w-4 h-4 text-emerald-400" />
-                  <span>Link copied!</span>
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-emerald-400 text-xs">Link copied!</span>
                 </>
               ) : (
                 <>
-                  <LinkIcon className="w-4 h-4 text-[#8E92A6]" />
+                  <LinkIcon className="w-3.5 h-3.5 text-[#8E92A6]" />
                   <span>Copy share link</span>
                 </>
               )}
@@ -176,19 +171,19 @@ export default function SummarySidebar({
 
             <button
               onClick={() => setShowShareMenu(!showShareMenu)}
-              className="p-2 rounded-xl bg-[#12141D] hover:bg-[#1C1E2A] border border-[#1E2030] hover:border-[#353950] text-[#8E92A6] hover:text-white transition-all"
+              className="p-1.5 rounded-lg bg-[#12141D] hover:bg-[#1C1E2A] border border-[#1E2030] hover:border-[#353950] text-[#8E92A6] hover:text-white transition-all cursor-pointer"
             >
-              <MoreVertical className="w-4 h-4" />
+              <MoreVertical className="w-3.5 h-3.5" />
             </button>
 
             {/* Share Dropdown */}
             {showShareMenu && (
-              <div className="absolute top-full right-0 mt-1.5 w-52 p-1.5 bg-[#12141D] border border-[#353950] rounded-xl z-20 space-y-0.5 text-sm shadow-xl shadow-black/40">
+              <div className="absolute top-full right-0 mt-1 w-48 p-1 bg-[#12141D] border border-[#353950] rounded-lg z-20 space-y-0.5 text-xs shadow-xl shadow-black/50">
                 <button
                   onClick={handleCopyShareLink}
-                  className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#1C1E2A] text-white flex items-center gap-2.5"
+                  className="w-full text-left px-2.5 py-1.5 rounded hover:bg-[#1C1E2A] text-white flex items-center gap-2"
                 >
-                  <LinkIcon className="w-4 h-4 text-[#8E92A6]" />
+                  <LinkIcon className="w-3.5 h-3.5 text-[#8E92A6]" />
                   <span>Copy share link</span>
                 </button>
                 <button
@@ -196,9 +191,9 @@ export default function SummarySidebar({
                     setShowShareMenu(false);
                     setIsEmailModalOpen(true);
                   }}
-                  className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#1C1E2A] text-white flex items-center gap-2.5"
+                  className="w-full text-left px-2.5 py-1.5 rounded hover:bg-[#1C1E2A] text-white flex items-center gap-2"
                 >
-                  <Mail className="w-4 h-4 text-[#8E92A6]" />
+                  <Mail className="w-3.5 h-3.5 text-[#8E92A6]" />
                   <span>Open follow-up draft</span>
                 </button>
               </div>
@@ -207,8 +202,8 @@ export default function SummarySidebar({
         </div>
       </div>
 
-      {/* Scrollable Content (Action Items + Highlights) */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-8">
+      {/* Scrollable Content (Action Items + Highlights) with Custom Scrollbar */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
         <ActionItemsList initialItems={meeting.actionItems} />
         <HighlightsList
           highlights={meeting.highlights}

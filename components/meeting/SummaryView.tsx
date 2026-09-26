@@ -504,25 +504,25 @@ export default function SummaryView({ summary, meeting }: SummaryViewProps) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#050608] text-white overflow-y-auto p-6 space-y-6">
+    <div className="flex flex-col h-full bg-[#050608] text-white overflow-y-auto p-4 lg:p-5 space-y-4 custom-scrollbar">
       {/* Generated AI Summary section - Updates dynamically upon clicking templates */}
       <div
-        className={`bg-[#0A0C12] rounded-xl border transition-all duration-300 p-6 ${
+        className={`bg-[#0A0C12] rounded-xl border transition-all duration-300 p-4 ${
           feedbackFlash
-            ? "border-[#00E5FF] shadow-[0_0_25px_rgba(0,229,255,0.2)]"
+            ? "border-[#00E5FF] shadow-[0_0_20px_rgba(0,229,255,0.2)]"
             : "border-[#1A1D2E]"
         }`}
       >
-        <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#1A1D2E] mb-5">
-          <div className="flex items-center gap-2.5">
-            <span className="text-base font-semibold text-white">
+        <div className="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b border-[#1A1D2E] mb-3.5">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-semibold text-white">
               {activeTemplateObj.name} Summary
             </span>
-            <span className="px-2.5 py-0.5 rounded-lg text-[10px] font-semibold text-[#00E5FF] bg-[#00E5FF]/10 border border-[#00E5FF]/20 flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-[#00E5FF]" />
+            <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold text-[#00E5FF] bg-[#00E5FF]/10 border border-[#00E5FF]/20 flex items-center gap-1">
+              <Sparkles className="w-2.5 h-2.5 text-[#00E5FF]" />
               AI Synthesized
             </span>
-            <span className="text-xs text-[#555869]">
+            <span className="text-[11px] text-[#555869]">
               ({activeBullets.length} points)
             </span>
           </div>
@@ -530,17 +530,17 @@ export default function SummaryView({ summary, meeting }: SummaryViewProps) {
           <div className="flex items-center gap-2">
             <button
               onClick={copySummaryText}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#12141D] hover:bg-[#1C1E2A] border border-[#1E2030] hover:border-[#353950] text-xs font-medium text-[#8E92A6] hover:text-white transition-all shadow-sm"
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#12141D] hover:bg-[#1C1E2A] border border-[#1E2030] hover:border-[#353950] text-xs font-medium text-[#8E92A6] hover:text-white transition-all shadow-sm cursor-pointer"
               title="Copy active summary to clipboard"
             >
               {copied ? (
                 <>
-                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <Check className="w-3 h-3 text-emerald-400" />
                   <span className="text-emerald-400">Copied</span>
                 </>
               ) : (
                 <>
-                  <Copy className="w-3.5 h-3.5" />
+                  <Copy className="w-3 h-3" />
                   <span>Copy summary</span>
                 </>
               )}
@@ -551,14 +551,14 @@ export default function SummaryView({ summary, meeting }: SummaryViewProps) {
         {/* Dynamic Bullet Points for Selected Template */}
         <div
           key={selectedTemplate}
-          className="space-y-4 animate-in fade-in-50 duration-200"
+          className="space-y-2.5 animate-in fade-in-50 duration-200"
         >
           {activeBullets.map((bullet, idx) => (
-            <div key={idx} className="flex items-start gap-3 group">
-              <span className="text-[#00E5FF] text-base leading-none mt-1 shrink-0 group-hover:scale-125 transition-transform">
+            <div key={idx} className="flex items-start gap-2.5 group">
+              <span className="text-[#00E5FF] text-sm leading-none mt-1 shrink-0 group-hover:scale-125 transition-transform">
                 •
               </span>
-              <div className="text-sm leading-relaxed text-[#C5C8D8]">
+              <div className="text-xs leading-relaxed text-[#C5C8D8]">
                 {bullet.category && (
                   <span className="font-semibold text-white mr-1.5">
                     {bullet.category}:
@@ -571,19 +571,19 @@ export default function SummaryView({ summary, meeting }: SummaryViewProps) {
         </div>
       </div>
 
-      {/* Select Template section */}
-      <div className="space-y-4">
+      {/* Select Template section - Compact 2-column or 3-column Grid */}
+      <div className="space-y-2.5">
         <div className="flex items-center justify-between">
-          <div className="text-xs font-semibold text-[#8E92A6] uppercase tracking-wider flex items-center gap-2">
-            <Layers className="w-3.5 h-3.5 text-[#00E5FF]" />
-            <span>Switch Summary Template ({TEMPLATES.length} Formats)</span>
+          <div className="text-[11px] font-semibold text-[#8E92A6] uppercase tracking-wider flex items-center gap-1.5">
+            <Layers className="w-3 h-3 text-[#00E5FF]" />
+            <span>Switch Template ({TEMPLATES.length} Formats)</span>
           </div>
-          <span className="text-[11px] text-[#555869]">
-            Click any format to regenerate summary above
+          <span className="text-[10px] text-[#555869]">
+            Click format to regenerate summary above
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-2">
           {TEMPLATES.map((tmpl) => {
             const Icon = tmpl.icon;
             const isSelected = selectedTemplate === tmpl.id;
@@ -592,38 +592,38 @@ export default function SummaryView({ summary, meeting }: SummaryViewProps) {
               <button
                 key={tmpl.id}
                 onClick={() => handleSelectTemplate(tmpl.id)}
-                className={`text-left p-4 rounded-xl border transition-all duration-200 flex items-start gap-3.5 cursor-pointer ${
+                className={`text-left p-2.5 rounded-lg border transition-all duration-150 flex items-start gap-2.5 cursor-pointer ${
                   isSelected
-                    ? "bg-[#12141D] border-[#00E5FF] text-white shadow-lg shadow-[#00E5FF]/15 ring-1 ring-[#00E5FF]/30"
+                    ? "bg-[#12141D] border-[#00E5FF] text-white shadow-md shadow-[#00E5FF]/15 ring-1 ring-[#00E5FF]/30"
                     : "bg-[#0A0C12] border-[#1A1D2E] hover:bg-[#12141D] hover:border-[#353950] text-[#8E92A6] hover:text-white"
                 }`}
               >
                 <div
-                  className={`mt-0.5 p-2 rounded-lg ${
+                  className={`mt-0.5 p-1.5 rounded-md shrink-0 ${
                     isSelected
                       ? "bg-[#00E5FF]/10 text-[#00E5FF]"
                       : "bg-[#12141D] text-[#555869]"
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className="w-3.5 h-3.5" />
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-1 mb-1">
-                    <span className={`text-xs font-semibold ${isSelected ? "text-white" : "text-[#C5C8D8]"}`}>
+                  <div className="flex items-center justify-between gap-1 mb-0.5">
+                    <span className={`text-[11px] font-semibold truncate ${isSelected ? "text-white" : "text-[#C5C8D8]"}`}>
                       {tmpl.name}
                     </span>
                     {isSelected ? (
-                      <span className="text-[10px] font-bold text-[#00E5FF] bg-[#00E5FF]/15 px-2 py-0.5 rounded-full border border-[#00E5FF]/30 flex items-center gap-1">
-                        <Check className="w-2.5 h-2.5" /> Active
+                      <span className="text-[9px] font-bold text-[#00E5FF] bg-[#00E5FF]/15 px-1.5 py-0.2 rounded-full border border-[#00E5FF]/30 flex items-center gap-0.5">
+                        <Check className="w-2 h-2" /> Active
                       </span>
                     ) : tmpl.isFree ? (
-                      <span className="text-[10px] font-medium text-[#555869]">
+                      <span className="text-[9px] font-medium text-[#555869]">
                         Default
                       </span>
                     ) : null}
                   </div>
-                  <p className="text-[11px] leading-relaxed text-[#6B6F82] line-clamp-2">
+                  <p className="text-[10px] leading-tight text-[#6B6F82] line-clamp-1">
                     {tmpl.desc}
                   </p>
                 </div>

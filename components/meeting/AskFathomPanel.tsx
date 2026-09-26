@@ -182,14 +182,14 @@ export default function AskFathomPanel({ meeting, onSeek }: AskFathomPanelProps)
 
   return (
     <div className="h-full flex flex-col bg-[#050608] text-white overflow-hidden select-none">
-      {/* Top Header Bar Inside Panel */}
-      <div className="h-12 border-b border-[#1A1D2E] bg-[#0A0C12] px-6 flex items-center justify-between shrink-0">
-        <div className="flex items-center gap-2.5">
-          <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[#00E5FF]/20 to-[#7C3AED]/20 border border-[#00E5FF]/30 flex items-center justify-center">
-            <Sparkles className="w-3 h-3 text-[#00E5FF]" />
+      {/* Top Header Bar Inside Panel - Compact */}
+      <div className="h-10 border-b border-[#1A1D2E] bg-[#0A0C12] px-4 flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-2">
+          <div className="w-5 h-5 rounded-md bg-gradient-to-br from-[#00E5FF]/20 to-[#7C3AED]/20 border border-[#00E5FF]/30 flex items-center justify-center">
+            <Sparkles className="w-2.5 h-2.5 text-[#00E5FF]" />
           </div>
           <span className="text-xs font-semibold text-white">Ask Fathom</span>
-          <span className="text-[10px] text-[#00E5FF] bg-[#00E5FF]/10 border border-[#00E5FF]/20 px-2 py-0.5 rounded-full font-medium">
+          <span className="text-[9px] text-[#00E5FF] bg-[#00E5FF]/10 border border-[#00E5FF]/20 px-1.5 py-0.2 rounded-full font-medium">
             AI Assistant
           </span>
         </div>
@@ -198,39 +198,39 @@ export default function AskFathomPanel({ meeting, onSeek }: AskFathomPanelProps)
           {messages.length > 0 && (
             <button
               onClick={() => setMessages([])}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-medium text-[#8E92A6] hover:text-white bg-[#12141D] hover:bg-[#1A1D2E] border border-[#1E2030] transition-colors"
+              className="flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium text-[#8E92A6] hover:text-white bg-[#12141D] hover:bg-[#1A1D2E] border border-[#1E2030] transition-colors cursor-pointer"
               title="Reset conversation"
             >
-              <RotateCcw className="w-3 h-3" />
-              <span>Clear chat</span>
+              <RotateCcw className="w-2.5 h-2.5" />
+              <span>Clear</span>
             </button>
           )}
-          <span className="text-[11px] text-[#555869] font-mono hidden sm:inline">
+          <span className="text-[10px] text-[#555869] font-mono hidden sm:inline">
             Grounded in call audio
           </span>
         </div>
       </div>
 
-      {/* Messages Scroll Area - Constrained to comfortable reading width */}
-      <div className="flex-1 overflow-y-auto px-4 py-6">
+      {/* Messages Scroll Area - Constrained to comfortable reading width with Custom Scrollbar */}
+      <div className="flex-1 overflow-y-auto px-4 py-4 custom-scrollbar">
         <div className="max-w-2xl lg:max-w-3xl mx-auto w-full flex flex-col justify-start min-h-full">
           {messages.length === 0 ? (
             /* Elegant Centered Empty State */
-            <div className="my-auto py-6 flex flex-col items-center text-center">
+            <div className="my-auto py-4 flex flex-col items-center text-center">
               {/* Animated Glowing AI Orb */}
-              <div className="relative mb-4">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#00E5FF]/20 via-[#7C3AED]/15 to-transparent border border-[#00E5FF]/30 flex items-center justify-center text-[#00E5FF] shadow-[0_0_30px_rgba(0,229,255,0.2)]">
-                  <Bot className="w-7 h-7" />
+              <div className="relative mb-3">
+                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#00E5FF]/20 via-[#7C3AED]/15 to-transparent border border-[#00E5FF]/30 flex items-center justify-center text-[#00E5FF] shadow-[0_0_20px_rgba(0,229,255,0.2)]">
+                  <Bot className="w-5 h-5" />
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[#12141D] border border-[#00E5FF]/40 flex items-center justify-center">
-                  <Sparkles className="w-3 h-3 text-[#00E5FF]" />
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[#12141D] border border-[#00E5FF]/40 flex items-center justify-center">
+                  <Sparkles className="w-2.5 h-2.5 text-[#00E5FF]" />
                 </div>
               </div>
 
-              <h3 className="text-base font-semibold text-white tracking-tight">
+              <h3 className="text-sm font-semibold text-white tracking-tight">
                 Ask anything about this call
               </h3>
-              <p className="mt-1.5 text-xs text-[#8E92A6] max-w-md leading-relaxed">
+              <p className="mt-1 text-xs text-[#8E92A6] max-w-sm leading-relaxed">
                 Instant AI answers with timestamped video citations synthesized directly from this meeting with{" "}
                 <span className="text-white font-medium">
                   {meeting.participants.map((p) => p.name).join(" and ")}
@@ -238,24 +238,24 @@ export default function AskFathomPanel({ meeting, onSeek }: AskFathomPanelProps)
                 .
               </p>
 
-              {/* 2x2 Grid of Polished Prompt Suggestions */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full mt-6">
+              {/* 2x2 Grid of Polished Compact Prompt Suggestions */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full mt-4">
                 {promptSuggestions.map((item, idx) => {
                   const Icon = item.icon;
                   return (
                     <button
                       key={idx}
                       onClick={() => handleAsk(item.prompt)}
-                      className="group p-3.5 rounded-xl bg-[#0A0C12] hover:bg-[#12141D] border border-[#1A1D2E] hover:border-[#00E5FF]/40 text-left transition-all duration-200 hover:shadow-lg hover:shadow-[#00E5FF]/5 flex items-start gap-3 cursor-pointer"
+                      className="group p-2.5 rounded-lg bg-[#0A0C12] hover:bg-[#12141D] border border-[#1A1D2E] hover:border-[#00E5FF]/40 text-left transition-all duration-150 hover:shadow-md hover:shadow-[#00E5FF]/5 flex items-start gap-2.5 cursor-pointer"
                     >
-                      <div className="p-2 rounded-lg bg-[#12141D] group-hover:bg-[#00E5FF]/10 text-[#8E92A6] group-hover:text-[#00E5FF] transition-colors shrink-0 mt-0.5">
-                        <Icon className="w-4 h-4" />
+                      <div className="p-1.5 rounded-md bg-[#12141D] group-hover:bg-[#00E5FF]/10 text-[#8E92A6] group-hover:text-[#00E5FF] transition-colors shrink-0 mt-0.5">
+                        <Icon className="w-3.5 h-3.5" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="text-xs font-semibold text-white group-hover:text-[#00E5FF] transition-colors">
                           {item.title}
                         </div>
-                        <div className="text-[11px] text-[#6B6F82] mt-0.5 leading-relaxed line-clamp-1">
+                        <div className="text-[10px] text-[#6B6F82] mt-0.5 leading-tight line-clamp-1">
                           {item.desc}
                         </div>
                       </div>
@@ -266,51 +266,51 @@ export default function AskFathomPanel({ meeting, onSeek }: AskFathomPanelProps)
             </div>
           ) : (
             /* Active Conversation Thread */
-            <div className="space-y-5 pb-4">
+            <div className="space-y-3.5 pb-2">
               {messages.map((msg) => (
                 <div
                   key={msg.id}
-                  className={`flex gap-3 ${
+                  className={`flex gap-2.5 ${
                     msg.sender === "user" ? "justify-end" : "justify-start"
                   }`}
                 >
                   {msg.sender === "fathom" && (
-                    <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#00E5FF]/20 to-[#7C3AED]/20 border border-[#00E5FF]/30 flex items-center justify-center shrink-0 mt-1 text-[#00E5FF] shadow-sm">
-                      <Bot className="w-4 h-4" />
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#00E5FF]/20 to-[#7C3AED]/20 border border-[#00E5FF]/30 flex items-center justify-center shrink-0 mt-0.5 text-[#00E5FF] shadow-sm">
+                      <Bot className="w-3.5 h-3.5" />
                     </div>
                   )}
 
                   <div
-                    className={`max-w-[85%] rounded-2xl p-4 text-xs leading-relaxed transition-all ${
+                    className={`max-w-[85%] rounded-xl p-3 text-xs leading-relaxed transition-all ${
                       msg.sender === "user"
-                        ? "bg-[#161926] border border-[#262B3D] text-white rounded-tr-sm shadow-md"
-                        : "bg-[#0A0C12] border border-[#1A1D2E] text-[#D8DAE5] rounded-tl-sm shadow-lg space-y-3"
+                        ? "bg-[#161926] border border-[#262B3D] text-white rounded-tr-sm shadow-sm"
+                        : "bg-[#0A0C12] border border-[#1A1D2E] text-[#D8DAE5] rounded-tl-sm shadow-md space-y-2.5"
                     }`}
                   >
-                    <div className="whitespace-pre-wrap leading-relaxed">
+                    <div className="whitespace-pre-wrap leading-relaxed text-xs">
                       {msg.text}
                     </div>
 
                     {/* Citations Block */}
                     {msg.citations && msg.citations.length > 0 && (
-                      <div className="pt-3 border-t border-[#1A1D2E] space-y-2">
-                        <div className="text-[10px] font-semibold text-[#8E92A6] uppercase tracking-wider flex items-center gap-1.5">
-                          <ShieldCheck className="w-3.5 h-3.5 text-[#00E5FF]" />
+                      <div className="pt-2 border-t border-[#1A1D2E] space-y-1.5">
+                        <div className="text-[9px] font-semibold text-[#8E92A6] uppercase tracking-wider flex items-center gap-1">
+                          <ShieldCheck className="w-3 h-3 text-[#00E5FF]" />
                           <span>Video Citations ({msg.citations.length})</span>
                         </div>
                         {msg.citations.map((c, i) => (
                           <div
                             key={i}
-                            className="p-2.5 rounded-lg bg-[#12141D] border border-[#1E2030] flex flex-col gap-1.5"
+                            className="p-2 rounded-md bg-[#12141D] border border-[#1E2030] flex flex-col gap-1"
                           >
-                            <p className="text-[11px] text-[#A6A9B8] italic">
+                            <p className="text-[10px] text-[#A6A9B8] italic">
                               "{c.quote}"
                             </p>
                             <button
                               onClick={() => onSeek(c.timestamp)}
-                              className="self-start inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border border-[#00E5FF]/30 text-[10px] font-mono font-medium text-[#00E5FF] transition-all cursor-pointer"
+                              className="self-start inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border border-[#00E5FF]/30 text-[9px] font-mono font-medium text-[#00E5FF] transition-all cursor-pointer"
                             >
-                              <Play className="w-2.5 h-2.5 fill-current" />
+                              <Play className="w-2 h-2 fill-current" />
                               <span>Jump to @{formatTime(c.timestamp)}</span>
                             </button>
                           </div>
@@ -320,22 +320,22 @@ export default function AskFathomPanel({ meeting, onSeek }: AskFathomPanelProps)
 
                     {/* Message Actions Footer */}
                     {msg.sender === "fathom" && (
-                      <div className="flex items-center justify-between pt-1 border-t border-white/5 text-[10px] text-[#555869]">
+                      <div className="flex items-center justify-between pt-1 border-t border-white/5 text-[9px] text-[#555869]">
                         <span className="flex items-center gap-1">
-                          <Check className="w-3 h-3 text-[#00E5FF]" /> Grounded in verbatim call audio
+                          <Check className="w-2.5 h-2.5 text-[#00E5FF]" /> Grounded in verbatim call audio
                         </span>
                         <button
                           onClick={() => handleCopyMessage(msg.id, msg.text)}
-                          className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-[#12141D] hover:text-white transition-colors"
+                          className="flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-[#12141D] hover:text-white transition-colors cursor-pointer"
                         >
                           {copiedId === msg.id ? (
                             <>
-                              <Check className="w-3 h-3 text-emerald-400" />
+                              <Check className="w-2.5 h-2.5 text-emerald-400" />
                               <span className="text-emerald-400">Copied</span>
                             </>
                           ) : (
                             <>
-                              <Copy className="w-3 h-3" />
+                              <Copy className="w-2.5 h-2.5" />
                               <span>Copy</span>
                             </>
                           )}
@@ -348,14 +348,14 @@ export default function AskFathomPanel({ meeting, onSeek }: AskFathomPanelProps)
 
               {/* Typing Animation State */}
               {isTyping && (
-                <div className="flex gap-3 items-center text-xs text-[#8E92A6] pl-1">
-                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#00E5FF]/20 to-[#7C3AED]/20 border border-[#00E5FF]/30 flex items-center justify-center shrink-0 text-[#00E5FF]">
-                    <Bot className="w-4 h-4 animate-pulse" />
+                <div className="flex gap-2.5 items-center text-xs text-[#8E92A6] pl-1">
+                  <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#00E5FF]/20 to-[#7C3AED]/20 border border-[#00E5FF]/30 flex items-center justify-center shrink-0 text-[#00E5FF]">
+                    <Bot className="w-3.5 h-3.5 animate-pulse" />
                   </div>
-                  <div className="flex items-center gap-2 p-3 rounded-2xl rounded-tl-sm bg-[#0A0C12] border border-[#1A1D2E] text-xs">
+                  <div className="flex items-center gap-1.5 p-2 rounded-xl rounded-tl-sm bg-[#0A0C12] border border-[#1A1D2E] text-xs">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] animate-ping" />
-                    <span className="text-[#8E92A6]">
-                      Synthesizing answer from call transcript...
+                    <span className="text-[#8E92A6] text-[11px]">
+                      Synthesizing answer from transcript...
                     </span>
                   </div>
                 </div>
@@ -367,8 +367,8 @@ export default function AskFathomPanel({ meeting, onSeek }: AskFathomPanelProps)
         </div>
       </div>
 
-      {/* Floating Centered Input Bar Dock */}
-      <div className="border-t border-[#1A1D2E] bg-[#0A0C12]/95 backdrop-blur-md px-4 py-3 shrink-0">
+      {/* Floating Centered Input Bar Dock - Compact */}
+      <div className="border-t border-[#1A1D2E] bg-[#0A0C12]/95 backdrop-blur-md px-4 py-2.5 shrink-0">
         <div className="max-w-2xl lg:max-w-3xl mx-auto w-full">
           <form
             onSubmit={(e) => {
@@ -377,11 +377,11 @@ export default function AskFathomPanel({ meeting, onSeek }: AskFathomPanelProps)
             }}
             className="relative"
           >
-            <div className="flex items-center bg-[#12141D] border border-[#1E2030] focus-within:border-[#00E5FF]/60 focus-within:shadow-[0_0_20px_rgba(0,229,255,0.12)] rounded-xl px-3 py-2 transition-all gap-2">
-              <Sparkles className="w-4 h-4 text-[#00E5FF] shrink-0" />
+            <div className="flex items-center bg-[#12141D] border border-[#1E2030] focus-within:border-[#00E5FF]/60 focus-within:shadow-[0_0_15px_rgba(0,229,255,0.1)] rounded-lg px-2.5 py-1.5 transition-all gap-2">
+              <Sparkles className="w-3.5 h-3.5 text-[#00E5FF] shrink-0" />
               <input
                 type="text"
-                placeholder="Ask about key decisions, timelines, action items, or specific topics..."
+                placeholder="Ask about decisions, timelines, action items..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 className="w-full bg-transparent text-xs text-white placeholder-[#555869] focus:outline-none"
@@ -389,14 +389,14 @@ export default function AskFathomPanel({ meeting, onSeek }: AskFathomPanelProps)
               <button
                 type="submit"
                 disabled={!input.trim() || isTyping}
-                className="w-7 h-7 rounded-lg bg-[#00E5FF] hover:bg-[#38EDFF] disabled:opacity-20 disabled:hover:bg-[#00E5FF] text-[#050608] flex items-center justify-center transition-all shrink-0 cursor-pointer disabled:cursor-not-allowed shadow-md shadow-[#00E5FF]/20"
+                className="w-6 h-6 rounded-md bg-[#00E5FF] hover:bg-[#38EDFF] disabled:opacity-20 disabled:hover:bg-[#00E5FF] text-[#050608] flex items-center justify-center transition-all shrink-0 cursor-pointer disabled:cursor-not-allowed shadow-sm shadow-[#00E5FF]/20"
                 title="Send question"
               >
-                <ArrowUp className="w-3.5 h-3.5 stroke-[2.5]" />
+                <ArrowUp className="w-3 h-3 stroke-[2.5]" />
               </button>
             </div>
           </form>
-          <div className="mt-1.5 flex items-center justify-between text-[10px] text-[#555869] px-1">
+          <div className="mt-1 flex items-center justify-between text-[9px] text-[#555869] px-1">
             <span>Press Enter ↵ to ask</span>
             <span className="font-mono">Fathom Intelligence Engine</span>
           </div>

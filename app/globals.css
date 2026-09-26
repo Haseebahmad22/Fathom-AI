@@ -76,3 +76,50 @@ textarea:focus-visible {
   0%, 100% { height: 10px; }
   50% { height: 18px; }
 }
+
+/* Custom sleek dark scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1C1F2E;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #353A52;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #1C1F2E transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(10, 12, 18, 0.3);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #222538;
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #00E5FF;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #222538 transparent;
+}

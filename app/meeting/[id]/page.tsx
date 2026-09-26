@@ -63,14 +63,14 @@ export default function MeetingDetailPage({ params }: MeetingPageProps) {
 
   return (
     <div className="h-screen w-screen bg-[#050608] text-white flex flex-col overflow-hidden font-sans select-none">
-      {/* Top Navbar */}
-      <header className="h-14 border-b border-[#1A1D2E] bg-[#0A0C12] px-5 lg:px-8 flex items-center justify-between shrink-0 z-10">
-        <div className="flex items-center gap-4">
+      {/* Top Navbar - Compact */}
+      <header className="h-12 border-b border-[#1A1D2E] bg-[#0A0C12] px-4 lg:px-6 flex items-center justify-between shrink-0 z-10">
+        <div className="flex items-center gap-3">
           <Link
             href="/dashboard"
-            className="flex items-center gap-2 text-sm text-[#8E92A6] hover:text-white transition-colors px-2.5 py-1.5 rounded-lg hover:bg-[#12141D]"
+            className="flex items-center gap-1.5 text-xs text-[#8E92A6] hover:text-white transition-colors px-2 py-1 rounded-md hover:bg-[#12141D]"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-3.5 h-3.5" />
             <span>Dashboard</span>
           </Link>
 
@@ -122,8 +122,8 @@ export default function MeetingDetailPage({ params }: MeetingPageProps) {
 
       {/* Main Two-Column Viewport */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Left Column (~65% width): Video Player + Tab Bar + Tab Content */}
-        <div className="flex-[65] flex flex-col h-full overflow-hidden border-r border-[#1A1D2E] bg-[#050608]">
+        {/* Left Column (~68% width): Video Player + Tab Bar + Tab Content */}
+        <div className="flex-[68] flex flex-col h-full overflow-hidden border-r border-[#1A1D2E] bg-[#050608]">
           {/* Video Player */}
           <VideoPlayer
             meeting={meeting}
@@ -133,15 +133,15 @@ export default function MeetingDetailPage({ params }: MeetingPageProps) {
             onTogglePlay={() => setIsPlaying(!isPlaying)}
           />
 
-          {/* Horizontal Tab Bar */}
-          <div className="px-6 bg-[#0A0C12] flex items-center gap-1 border-b border-[#1A1D2E] shrink-0">
+          {/* Horizontal Tab Bar - Compact Height */}
+          <div className="px-4 bg-[#0A0C12] flex items-center gap-1 border-b border-[#1A1D2E] shrink-0 h-10">
             {tabs.map((tab) => {
               const isSelected = activeTab === tab.id;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-4 py-3 text-sm font-medium relative transition-all rounded-t-lg ${
+                  className={`px-3 py-1.5 text-xs font-semibold relative transition-all rounded-md cursor-pointer ${
                     isSelected
                       ? "text-white bg-[#12141D]"
                       : "text-[#8E92A6] hover:text-white hover:bg-[#0F1118]"
@@ -156,8 +156,8 @@ export default function MeetingDetailPage({ params }: MeetingPageProps) {
             })}
           </div>
 
-          {/* Dynamic Tab Content Area */}
-          <div className={`flex-1 ${activeTab === "ask" ? "overflow-hidden flex flex-col" : "overflow-y-auto"} bg-[#050608]`}>
+          {/* Dynamic Tab Content Area with Custom Scrollbar */}
+          <div className={`flex-1 ${activeTab === "ask" ? "overflow-hidden flex flex-col" : "overflow-y-auto custom-scrollbar"} bg-[#050608]`}>
             {activeTab === "summary" && (
               <SummaryView summary={meeting.summary} meeting={meeting} />
             )}
@@ -178,8 +178,8 @@ export default function MeetingDetailPage({ params }: MeetingPageProps) {
           </div>
         </div>
 
-        {/* Right Column (~35% width, Sticky/Persistent): Summary, Actions & Highlights Sidebar */}
-        <div className="flex-[35] min-w-[340px] max-w-[420px] h-full overflow-hidden flex flex-col shrink-0 bg-[#0A0C12]">
+        {/* Right Column (~32% width, Sticky/Persistent): Summary, Actions & Highlights Sidebar */}
+        <div className="flex-[32] min-w-[290px] max-w-[360px] h-full overflow-hidden flex flex-col shrink-0 bg-[#0A0C12]">
           <SummarySidebar
             meeting={meeting}
             onSeek={handleSeek}
