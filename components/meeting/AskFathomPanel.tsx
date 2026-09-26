@@ -189,8 +189,9 @@ export default function AskFathomPanel({ meeting, onSeek }: AskFathomPanelProps)
             <Sparkles className="w-2.5 h-2.5 text-[#00E5FF]" />
           </div>
           <span className="text-xs font-semibold text-white">Ask Fathom</span>
-          <span className="text-[9px] text-[#00E5FF] bg-[#00E5FF]/10 border border-[#00E5FF]/20 px-1.5 py-0.2 rounded-full font-medium">
-            AI Assistant
+          <span className="inline-flex items-center gap-1 text-[9px] text-[#38EDFF] bg-gradient-to-r from-[#00E5FF]/15 to-[#00E5FF]/5 border border-[#00E5FF]/30 px-2 py-0.5 rounded-full font-semibold shadow-[0_0_8px_rgba(0,229,255,0.12)]">
+            <span className="w-1 h-1 rounded-full bg-[#00E5FF] shadow-[0_0_4px_#00E5FF] animate-pulse" />
+            <span>AI Assistant</span>
           </span>
         </div>
 
@@ -198,7 +199,7 @@ export default function AskFathomPanel({ meeting, onSeek }: AskFathomPanelProps)
           {messages.length > 0 && (
             <button
               onClick={() => setMessages([])}
-              className="flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium text-[#8E92A6] hover:text-white bg-[#12141D] hover:bg-[#1A1D2E] border border-[#1E2030] transition-colors cursor-pointer"
+              className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium text-[#8E92A6] hover:text-white bg-[#12141D] hover:bg-[#1A1D2E] border border-white/10 transition-colors cursor-pointer"
               title="Reset conversation"
             >
               <RotateCcw className="w-2.5 h-2.5" />
@@ -308,10 +309,10 @@ export default function AskFathomPanel({ meeting, onSeek }: AskFathomPanelProps)
                             </p>
                             <button
                               onClick={() => onSeek(c.timestamp)}
-                              className="self-start inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border border-[#00E5FF]/30 text-[9px] font-mono font-medium text-[#00E5FF] transition-all cursor-pointer"
+                              className="self-start inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border border-[#00E5FF]/30 text-[9px] font-mono font-semibold text-[#00E5FF] shadow-[0_0_8px_rgba(0,229,255,0.12)] transition-all cursor-pointer active:scale-95"
                             >
                               <Play className="w-2 h-2 fill-current" />
-                              <span>Jump to @{formatTime(c.timestamp)}</span>
+                              <span>Jump to {formatTime(c.timestamp)}</span>
                             </button>
                           </div>
                         ))}

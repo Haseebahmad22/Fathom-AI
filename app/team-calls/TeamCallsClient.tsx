@@ -76,9 +76,10 @@ export default function TeamCallsClient({ user }: TeamCallsClientProps) {
                   <h1 className="text-2xl font-bold text-white tracking-tight">
                     Team Calls
                   </h1>
-                  <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold text-[#00E5FF] bg-[#00E5FF]/10 border border-[#00E5FF]/20 flex items-center gap-1">
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold text-[#38EDFF] bg-gradient-to-r from-[#00E5FF]/15 to-[#00E5FF]/5 border border-[#00E5FF]/30 shadow-[0_0_12px_rgba(0,229,255,0.12)] flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] shadow-[0_0_6px_#00E5FF] animate-pulse" />
                     <Users className="w-3.5 h-3.5" />
-                    Collaborator Shared
+                    <span>Collaborator Shared</span>
                   </span>
                 </div>
                 <p className="text-sm text-[#8E92A6] mt-1">
@@ -90,10 +91,10 @@ export default function TeamCallsClient({ user }: TeamCallsClientProps) {
               <div className="flex flex-wrap items-center gap-2">
                 <button
                   onClick={() => setSelectedCollaborator("all")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
                     selectedCollaborator === "all"
-                      ? "bg-[#00E5FF] text-[#050608] shadow-sm shadow-[#00E5FF]/20"
-                      : "bg-[#0A0C12] hover:bg-[#12141D] text-[#8E92A6] hover:text-white border border-[#1E2030]"
+                      ? "bg-gradient-to-r from-[#00E5FF] to-[#38EDFF] text-[#050608] shadow-[0_0_14px_rgba(0,229,255,0.3)] font-bold"
+                      : "bg-white/[0.03] hover:bg-white/[0.08] text-[#8E92A6] hover:text-white border border-white/10"
                   }`}
                 >
                   All ({sharedMeetings.length})
@@ -106,19 +107,19 @@ export default function TeamCallsClient({ user }: TeamCallsClientProps) {
                     <button
                       key={c.name}
                       onClick={() => setSelectedCollaborator(c.name)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                      className={`px-3.5 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
                         isSelected
-                          ? "bg-[#00E5FF] text-[#050608] shadow-sm shadow-[#00E5FF]/20"
-                          : "bg-[#0A0C12] hover:bg-[#12141D] text-[#8E92A6] hover:text-white border border-[#1E2030]"
+                          ? "bg-gradient-to-r from-[#00E5FF] to-[#38EDFF] text-[#050608] shadow-[0_0_14px_rgba(0,229,255,0.3)] font-bold"
+                          : "bg-white/[0.03] hover:bg-white/[0.08] text-[#8E92A6] hover:text-white border border-white/10"
                       }`}
                     >
-                      <span className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-[7px] font-bold ${
-                        isSelected ? "bg-black text-[#00E5FF]" : "bg-[#1E2030] text-[#00E5FF]"
+                      <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-bold ${
+                        isSelected ? "bg-black/80 text-[#00E5FF]" : "bg-[#1E2030] text-[#00E5FF] border border-[#00E5FF]/20"
                       }`}>
                         {c.initials}
                       </span>
                       <span>{c.name}</span>
-                      <span className="opacity-60 text-[10px]">({count})</span>
+                      <span className="opacity-70 text-[10px]">({count})</span>
                     </button>
                   );
                 })}

@@ -201,14 +201,14 @@ export default function SummarySidebar({
         </div>
 
         {/* Participant chips */}
-        <div className="flex flex-wrap items-center gap-1">
+        <div className="flex flex-wrap items-center gap-1.5">
           {meeting.participants.map((p, i) => (
             <span
               key={i}
-              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#12141D] border border-[#1E2030] text-[10px] text-[#C5C8D8]"
+              className="inline-flex items-center gap-1.5 pl-1 pr-2.5 py-0.5 rounded-full bg-gradient-to-r from-white/[0.08] to-white/[0.02] border border-white/10 hover:border-white/20 text-[10px] font-medium text-[#E1E4EA] shadow-sm backdrop-blur-sm transition-all hover:scale-102"
             >
               <span
-                className="w-3.5 h-3.5 rounded-full flex items-center justify-center text-[7px] font-bold text-white shrink-0"
+                className="w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-bold text-white shrink-0 shadow-[0_0_6px_rgba(0,0,0,0.5)]"
                 style={{ backgroundColor: p.avatarColor }}
               >
                 {p.initials}

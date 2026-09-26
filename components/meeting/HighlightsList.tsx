@@ -89,9 +89,9 @@ export default function HighlightsList({
         <h4 className="text-[11px] font-semibold text-[#8E92A6] uppercase tracking-wider">
           Highlights
         </h4>
-        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-medium text-[#555869] bg-[#12141D] border border-[#1E2030]">
-          <Lock className="w-2.5 h-2.5" />
-          Internal only
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold text-amber-300/90 bg-gradient-to-r from-amber-500/15 to-amber-500/5 border border-amber-500/25 shadow-[0_0_8px_rgba(245,158,11,0.1)]">
+          <Lock className="w-2.5 h-2.5 text-amber-400" />
+          <span>Internal only</span>
         </span>
       </div>
 
@@ -120,7 +120,7 @@ export default function HighlightsList({
                     </span>
 
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-mono text-[#555869]">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-medium text-[#8E92A6] bg-white/[0.04] border border-white/5">
                         {formatTime(h.timestampSeconds)}
                       </span>
 
@@ -131,10 +131,10 @@ export default function HighlightsList({
                           setOpenDropdownId(isDropdownOpen ? null : h.id);
                           setIsCreatingNew(false);
                         }}
-                        className="px-1.5 py-0.5 rounded bg-[#12141D] hover:bg-[#1A1D2E] border border-[#1E2030] hover:border-[#00E5FF]/40 text-[10px] font-medium text-[#8E92A6] hover:text-[#00E5FF] transition-all flex items-center gap-1 cursor-pointer"
+                        className="px-2 py-0.5 rounded-full bg-[#12141D] hover:bg-[#1A1D2E] border border-[#1E2030] hover:border-[#00E5FF]/40 text-[10px] font-medium text-[#8E92A6] hover:text-[#00E5FF] transition-all flex items-center gap-1 cursor-pointer"
                         title="Add clip to playlist"
                       >
-                        <ListPlus className="w-3 h-3" />
+                        <ListPlus className="w-3 h-3 text-[#00E5FF]" />
                         <span className="hidden sm:inline">Add to playlist</span>
                       </button>
                     </div>
@@ -146,8 +146,8 @@ export default function HighlightsList({
 
                   {/* Feedback Toast */}
                   {feedbackMsg?.id === h.id && (
-                    <div className="mt-1.5 flex items-center gap-1 text-[10px] font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-800/40 rounded px-2 py-0.5">
-                      <Check className="w-3 h-3" />
+                    <div className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-300 bg-gradient-to-r from-emerald-500/15 to-emerald-500/5 border border-emerald-500/30 rounded-full px-2.5 py-0.5 shadow-[0_0_8px_rgba(16,185,129,0.12)]">
+                      <Check className="w-3 h-3 text-emerald-400" />
                       <span>{feedbackMsg.text}</span>
                     </div>
                   )}

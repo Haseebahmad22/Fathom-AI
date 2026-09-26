@@ -313,9 +313,12 @@ export default function PlaylistDetailClient({
                       >
                         <Edit2 className="w-3.5 h-3.5" />
                       </button>
-                      <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold text-[#00E5FF] bg-[#00E5FF]/10 border border-[#00E5FF]/20 shrink-0">
-                        {resolvedClips.length}{" "}
-                        {resolvedClips.length === 1 ? "Clip" : "Clips"}
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold text-[#38EDFF] bg-gradient-to-r from-[#00E5FF]/15 to-[#00E5FF]/5 border border-[#00E5FF]/30 shadow-[0_0_12px_rgba(0,229,255,0.12)] shrink-0">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] shadow-[0_0_6px_#00E5FF] animate-pulse" />
+                        <span>
+                          {resolvedClips.length}{" "}
+                          {resolvedClips.length === 1 ? "Clip" : "Clips"}
+                        </span>
                       </span>
                     </div>
 
@@ -432,8 +435,9 @@ export default function PlaylistDetailClient({
                       <span>·</span>
                       <span>From {activeClip.meeting.title}</span>
                       <span>·</span>
-                      <span className="font-mono text-[#00E5FF]">
-                        @{formatTime(activeClip.highlight.timestampSeconds)}
+                      <span className="inline-flex items-center gap-1 font-mono text-[#00E5FF] bg-gradient-to-r from-[#00E5FF]/15 to-[#00E5FF]/5 border border-[#00E5FF]/25 px-2 py-0.5 rounded-full text-[10px] shadow-[0_0_8px_rgba(0,229,255,0.1)]">
+                        <Clock className="w-2.5 h-2.5 opacity-80" />
+                        <span>{formatTime(activeClip.highlight.timestampSeconds)}</span>
                       </span>
                     </div>
                   </div>
@@ -495,10 +499,10 @@ export default function PlaylistDetailClient({
                           setIsPlayingAll(true);
                           setPlayProgress(0);
                         }}
-                        className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 cursor-pointer transition-all ${
+                        className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 cursor-pointer transition-all border ${
                           isActive
-                            ? "bg-[#00E5FF] text-[#050608]"
-                            : "bg-[#12141D] text-[#8E92A6] hover:bg-[#00E5FF]/20 hover:text-[#00E5FF]"
+                            ? "bg-gradient-to-br from-[#00E5FF] to-[#00B4D8] text-[#050608] border-[#00E5FF] shadow-[0_0_12px_rgba(0,229,255,0.4)]"
+                            : "bg-[#12141D] text-[#8E92A6] border-white/5 hover:border-[#00E5FF]/40 hover:text-[#00E5FF]"
                         }`}
                         title="Click to play this clip"
                       >
@@ -519,8 +523,9 @@ export default function PlaylistDetailClient({
                             {clip.highlight.speakerName}
                           </span>
                           <span>·</span>
-                          <span className="font-mono text-[#00E5FF]">
-                            @{formatTime(clip.highlight.timestampSeconds)}
+                          <span className="inline-flex items-center gap-1 font-mono text-[#00E5FF] bg-gradient-to-r from-[#00E5FF]/15 to-[#00E5FF]/5 border border-[#00E5FF]/25 px-2 py-0.5 rounded-full text-[10px] shadow-[0_0_8px_rgba(0,229,255,0.1)]">
+                            <Clock className="w-2.5 h-2.5 opacity-80" />
+                            <span>{formatTime(clip.highlight.timestampSeconds)}</span>
                           </span>
                         </div>
                       </div>

@@ -141,39 +141,45 @@ export default function VideoPlayer({
         <div className="absolute inset-0 bg-gradient-to-t from-[#050608]/90 via-black/20 to-black/40 pointer-events-none" />
 
         {/* Top-Left: Live / Call Recording Badge */}
-        <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5 pointer-events-none">
-          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[10px] font-medium text-white shadow-lg">
-            <Radio
-              className={`w-3 h-3 ${
-                isPlaying ? "text-[#00E5FF] animate-pulse" : "text-emerald-400"
+        <div className="absolute top-2.5 left-2.5 flex items-center gap-2 pointer-events-none">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/15 text-[10px] font-semibold text-white shadow-[0_4px_16px_rgba(0,0,0,0.6)]">
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${
+                isPlaying
+                  ? "bg-[#00E5FF] shadow-[0_0_8px_#00E5FF] animate-pulse"
+                  : "bg-emerald-400 shadow-[0_0_8px_#34d399]"
               }`}
             />
-            <span>{isPlaying ? "Playing recording" : "Call Recording"}</span>
+            <span className="tracking-wide uppercase text-[9px] font-bold">
+              {isPlaying ? "Playing" : "Recording"}
+            </span>
           </div>
-          <div className="px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[10px] font-mono text-[#8E92A6]">
-            1080p
+          <div className="inline-flex items-center px-2 py-0.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-[10px] font-mono font-medium text-[#C5C8D8]">
+            1080p HD
           </div>
         </div>
 
         {/* Top-Right: Video Details Tag */}
         <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5 pointer-events-none">
-          <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[10px] font-medium text-white shadow-lg">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/15 text-[10px] font-medium text-white shadow-[0_4px_16px_rgba(0,0,0,0.6)]">
             <Video className="w-3 h-3 text-[#00E5FF]" />
-            <span>{meeting.durationMinutes} min capture</span>
+            <span className="font-mono text-zinc-200">{meeting.durationMinutes}m capture</span>
           </div>
         </div>
 
         {/* Bottom-Left: Active Speaker Badge */}
         <div className="absolute bottom-2.5 left-2.5 pointer-events-none flex items-center gap-1.5">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/70 backdrop-blur-md border border-white/10 text-[11px] text-white shadow-lg">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-[11px] text-white shadow-[0_4px_20px_rgba(0,0,0,0.8)]">
             <span
               className={`w-1.5 h-1.5 rounded-full ${
-                isPlaying ? "bg-[#00E5FF] animate-ping" : "bg-emerald-400"
+                isPlaying
+                  ? "bg-[#00E5FF] shadow-[0_0_8px_#00E5FF] animate-pulse"
+                  : "bg-emerald-400 shadow-[0_0_8px_#34d399]"
               }`}
             />
-            <span className="font-medium">{activeSpeaker.name}</span>
-            <span className="text-[#8E92A6] text-[10px]">
-              ({activeSpeaker.role || "Host"})
+            <span className="font-medium tracking-tight text-white">{activeSpeaker.name}</span>
+            <span className="text-[#8E92A6] text-[10px] px-1.5 py-0.2 rounded-full bg-white/10 border border-white/10">
+              {activeSpeaker.role || "Host"}
             </span>
           </div>
         </div>
@@ -282,7 +288,7 @@ export default function VideoPlayer({
         {/* Playback Speed Toggle */}
         <button
           onClick={cycleSpeed}
-          className="px-2 py-0.5 rounded font-mono text-[10px] font-semibold text-[#8E92A6] hover:text-white bg-[#12141D] hover:bg-[#1A1D2E] border border-[#1E2030] hover:border-[#353950] transition-all cursor-pointer"
+          className="px-2.5 py-0.5 rounded-full font-mono text-[10px] font-semibold text-[#38EDFF] hover:text-white bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border border-[#00E5FF]/30 transition-all cursor-pointer shadow-[0_0_8px_rgba(0,229,255,0.1)] active:scale-95"
           title="Playback speed"
         >
           {speed}

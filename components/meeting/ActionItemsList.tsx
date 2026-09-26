@@ -64,8 +64,9 @@ export default function ActionItemsList({
         <h4 className="text-[11px] font-semibold text-[#8E92A6] uppercase tracking-wider">
           Action items
         </h4>
-        <span className="text-[10px] font-semibold text-[#555869] bg-[#12141D] border border-[#1E2030] rounded-md px-1.5 py-0.5">
-          {items.filter((i) => i.isDone).length}/{items.length}
+        <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-emerald-400 bg-gradient-to-r from-emerald-500/15 to-emerald-500/5 border border-emerald-500/30 rounded-full px-2.5 py-0.5 shadow-[0_0_8px_rgba(16,185,129,0.12)]">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_4px_#34d399]" />
+          <span>{items.filter((i) => i.isDone).length}/{items.length} done</span>
         </span>
       </div>
 
@@ -117,17 +118,17 @@ export default function ActionItemsList({
               </p>
 
               {(item.assignee || item.dueDate) && (
-                <div className="flex items-center gap-2.5 mt-1.5 text-[10px] text-[#555869]">
+                <div className="flex items-center gap-2 mt-1.5 text-[10px]">
                   {item.assignee && (
-                    <span className="inline-flex items-center gap-1">
-                      <UserIcon className="w-2.5 h-2.5" />
-                      {item.assignee}
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/5 text-[#A5A8B8]">
+                      <UserIcon className="w-2.5 h-2.5 text-[#00E5FF]/70" />
+                      <span>{item.assignee}</span>
                     </span>
                   )}
                   {item.dueDate && (
-                    <span className="inline-flex items-center gap-1">
-                      <Calendar className="w-2.5 h-2.5" />
-                      {item.dueDate}
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/5 text-[#A5A8B8]">
+                      <Calendar className="w-2.5 h-2.5 text-amber-400/70" />
+                      <span>{item.dueDate}</span>
                     </span>
                   )}
                 </div>

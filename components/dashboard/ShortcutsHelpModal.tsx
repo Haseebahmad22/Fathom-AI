@@ -132,8 +132,9 @@ export default function ShortcutsHelpModal({
                   <MessageCircle className="w-4 h-4 text-emerald-400" />
                   <span className="font-semibold text-white">Support Available</span>
                 </div>
-                <span className="px-1.5 py-0.2 rounded text-[10px] font-bold text-emerald-400 bg-emerald-950/40 border border-emerald-800/40">
-                  24/7
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold text-emerald-300 bg-gradient-to-r from-emerald-500/15 to-emerald-500/5 border border-emerald-500/30 shadow-[0_0_8px_rgba(16,185,129,0.15)]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_4px_#34d399]" />
+                  <span>24/7</span>
                 </span>
               </div>
             </div>

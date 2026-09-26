@@ -284,8 +284,9 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                         <span className="text-xs font-semibold text-white">
                           Passive Loopback Audio Capture (Bot-Free)
                         </span>
-                        <span className="px-1.5 py-0.2 rounded text-[9px] font-bold text-[#00E5FF] bg-[#00E5FF]/10 border border-[#00E5FF]/20">
-                          RECOMMENDED
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold text-[#38EDFF] bg-gradient-to-r from-[#00E5FF]/15 to-[#00E5FF]/5 border border-[#00E5FF]/30 shadow-[0_0_8px_rgba(0,229,255,0.12)]">
+                          <span className="w-1 h-1 rounded-full bg-[#00E5FF] shadow-[0_0_4px_#00E5FF]" />
+                          <span>RECOMMENDED</span>
                         </span>
                       </div>
                       <p className="text-[11px] text-[#8E92A6] mt-0.5">
@@ -395,8 +396,9 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                         <div className="flex items-center gap-2">
                           <h4 className="text-xs font-bold text-white">HubSpot CRM</h4>
                           {integrations.hubspot && (
-                            <span className="px-1.5 py-0.2 rounded text-[10px] font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-800/40">
-                              Active
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold text-emerald-300 bg-gradient-to-r from-emerald-500/15 to-emerald-500/5 border border-emerald-500/30 shadow-[0_0_8px_rgba(16,185,129,0.12)]">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_4px_#34d399]" />
+                              <span>Active</span>
                             </span>
                           )}
                         </div>
@@ -427,8 +429,9 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                         <div className="flex items-center gap-2">
                           <h4 className="text-xs font-bold text-white">Slack Workspace</h4>
                           {integrations.slack && (
-                            <span className="px-1.5 py-0.2 rounded text-[10px] font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-800/40">
-                              Active
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold text-emerald-300 bg-gradient-to-r from-emerald-500/15 to-emerald-500/5 border border-emerald-500/30 shadow-[0_0_8px_rgba(16,185,129,0.12)]">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_4px_#34d399]" />
+                              <span>Active</span>
                             </span>
                           )}
                         </div>
@@ -459,8 +462,9 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                         <div className="flex items-center gap-2">
                           <h4 className="text-xs font-bold text-white">Notion Database</h4>
                           {integrations.notion && (
-                            <span className="px-1.5 py-0.2 rounded text-[10px] font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-800/40">
-                              Active
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold text-emerald-300 bg-gradient-to-r from-emerald-500/15 to-emerald-500/5 border border-emerald-500/30 shadow-[0_0_8px_rgba(16,185,129,0.12)]">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_4px_#34d399]" />
+                              <span>Active</span>
                             </span>
                           )}
                         </div>
@@ -491,8 +495,9 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                         <div className="flex items-center gap-2">
                           <h4 className="text-xs font-bold text-white">Salesforce</h4>
                           {integrations.salesforce && (
-                            <span className="px-1.5 py-0.2 rounded text-[10px] font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-800/40">
-                              Active
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold text-emerald-300 bg-gradient-to-r from-emerald-500/15 to-emerald-500/5 border border-emerald-500/30 shadow-[0_0_8px_rgba(16,185,129,0.12)]">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_4px_#34d399]" />
+                              <span>Active</span>
                             </span>
                           )}
                         </div>
@@ -554,13 +559,15 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                     {vocabulary.map((word) => (
                       <span
                         key={word}
-                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#12141D] border border-[#1E2030] hover:border-[#00E5FF]/40 text-xs text-white transition-colors group"
+                        className="inline-flex items-center gap-2 pl-3 pr-2 py-1 rounded-full bg-gradient-to-r from-white/[0.07] to-white/[0.02] border border-white/10 hover:border-[#00E5FF]/40 text-xs text-[#E1E4EA] hover:text-white transition-all group backdrop-blur-sm shadow-sm"
                       >
-                        <span>{word}</span>
+                        <span className="font-mono text-[11px] text-[#00E5FF]/80">#</span>
+                        <span className="font-medium">{word}</span>
                         <button
                           type="button"
                           onClick={() => removeVocabularyWord(word)}
-                          className="text-[#555869] hover:text-rose-400 transition-colors cursor-pointer"
+                          className="w-4 h-4 rounded-full flex items-center justify-center text-[#555869] group-hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
+                          title={`Remove ${word}`}
                         >
                           <X className="w-3 h-3" />
                         </button>
@@ -638,15 +645,24 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                       </div>
 
                       <span
-                        className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${
                           member.role === "Owner"
-                            ? "bg-[#00E5FF]/10 text-[#00E5FF] border-[#00E5FF]/30"
+                            ? "bg-gradient-to-r from-[#00E5FF]/15 to-[#00E5FF]/5 text-[#38EDFF] border-[#00E5FF]/35 shadow-[0_0_10px_rgba(0,229,255,0.15)]"
                             : member.role === "Admin"
-                            ? "bg-purple-950/40 text-purple-300 border-purple-800/40"
-                            : "bg-[#12141D] text-[#8E92A6] border-[#1E2030]"
+                            ? "bg-gradient-to-r from-purple-500/15 to-purple-500/5 text-purple-300 border-purple-500/35 shadow-[0_0_10px_rgba(168,85,247,0.15)]"
+                            : "bg-white/[0.04] text-[#A5A8B8] border-white/10"
                         }`}
                       >
-                        {member.role}
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full ${
+                            member.role === "Owner"
+                              ? "bg-[#00E5FF] shadow-[0_0_4px_#00E5FF]"
+                              : member.role === "Admin"
+                              ? "bg-purple-400 shadow-[0_0_4px_#c084fc]"
+                              : "bg-zinc-400"
+                          }`}
+                        />
+                        <span>{member.role}</span>
                       </span>
                     </div>
                   ))}

@@ -554,12 +554,12 @@ export default function SummaryView({ summary, meeting }: SummaryViewProps) {
             <span className="text-sm font-semibold text-white">
               {activeTemplateObj.name} Summary
             </span>
-            <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold text-[#00E5FF] bg-[#00E5FF]/10 border border-[#00E5FF]/20 flex items-center gap-1">
-              <Sparkles className="w-2.5 h-2.5 text-[#00E5FF]" />
-              AI Synthesized
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold text-[#38EDFF] bg-gradient-to-r from-[#00E5FF]/15 to-[#00E5FF]/5 border border-[#00E5FF]/30 shadow-[0_0_10px_rgba(0,229,255,0.12)]">
+              <Sparkles className="w-3 h-3 text-[#00E5FF] animate-pulse" />
+              <span>AI Synthesized</span>
             </span>
-            <span className="text-[11px] text-[#555869]">
-              ({activeBullets.length} points)
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium text-[#8E92A6] bg-white/[0.04] border border-white/5">
+              {activeBullets.length} points
             </span>
           </div>
 
@@ -606,8 +606,9 @@ export default function SummaryView({ summary, meeting }: SummaryViewProps) {
                   )}
                   <span>{bullet.text}</span>
                   {isCustom && (
-                    <span className="ml-2 text-[9px] font-bold text-purple-400 bg-purple-950/40 border border-purple-800/40 px-1 py-0.2 rounded">
-                      Custom Note
+                    <span className="inline-flex items-center gap-1 ml-2 px-2 py-0.5 rounded-full text-[9px] font-semibold text-purple-300 bg-gradient-to-r from-purple-500/15 to-purple-500/5 border border-purple-500/30 shadow-[0_0_8px_rgba(168,85,247,0.12)]">
+                      <span className="w-1 h-1 rounded-full bg-purple-400" />
+                      <span>Custom Note</span>
                     </span>
                   )}
                 </div>
@@ -718,11 +719,12 @@ export default function SummaryView({ summary, meeting }: SummaryViewProps) {
                       {tmpl.name}
                     </span>
                     {isSelected ? (
-                      <span className="text-[9px] font-bold text-[#00E5FF] bg-[#00E5FF]/15 px-1.5 py-0.2 rounded-full border border-[#00E5FF]/30 flex items-center gap-0.5">
-                        <Check className="w-2 h-2" /> Active
+                      <span className="inline-flex items-center gap-1 text-[9px] font-bold text-[#38EDFF] bg-gradient-to-r from-[#00E5FF]/20 to-[#00E5FF]/10 px-2 py-0.5 rounded-full border border-[#00E5FF]/35 shadow-[0_0_8px_rgba(0,229,255,0.15)]">
+                        <Check className="w-2.5 h-2.5 stroke-[2.5]" />
+                        <span>Active</span>
                       </span>
                     ) : tmpl.isFree ? (
-                      <span className="text-[9px] font-medium text-[#555869]">
+                      <span className="inline-flex items-center text-[9px] font-medium text-[#8E92A6] px-1.5 py-0.2 rounded-full bg-white/[0.04] border border-white/5">
                         Default
                       </span>
                     ) : null}

@@ -93,9 +93,10 @@ export default function PlaylistsClient({ user }: PlaylistsClientProps) {
                 <h1 className="text-2xl font-bold text-white tracking-tight">
                   Playlists
                 </h1>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold text-[#00E5FF] bg-[#00E5FF]/10 border border-[#00E5FF]/20 flex items-center gap-1">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold text-[#38EDFF] bg-gradient-to-r from-[#00E5FF]/15 to-[#00E5FF]/5 border border-[#00E5FF]/30 shadow-[0_0_12px_rgba(0,229,255,0.12)] flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] shadow-[0_0_6px_#00E5FF] animate-pulse" />
                   <Film className="w-3.5 h-3.5" />
-                  {playlists.length} Playlists
+                  <span>{playlists.length} Playlists</span>
                 </span>
               </div>
               <p className="text-sm text-[#8E92A6] mt-1">
@@ -173,7 +174,7 @@ export default function PlaylistsClient({ user }: PlaylistsClientProps) {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
 
                       {/* Clip Count Badge */}
-                      <div className="absolute bottom-2.5 left-2.5 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm text-[10px] font-semibold text-white border border-white/10 flex items-center gap-1.5">
+                      <div className="absolute bottom-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-black/70 backdrop-blur-md text-[10px] font-semibold text-white border border-white/15 flex items-center gap-1.5 shadow-[0_4px_16px_rgba(0,0,0,0.6)]">
                         <Play className="w-2.5 h-2.5 fill-current text-[#00E5FF]" />
                         <span>
                           {pl.highlightRefs.length}{" "}

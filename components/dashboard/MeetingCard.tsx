@@ -149,19 +149,20 @@ export default function MeetingCard({ meeting, onDelete }: MeetingCardProps) {
           </div>
 
           {/* Duration badge */}
-          <div className="absolute bottom-2 right-2 px-2 py-1 rounded-md bg-black/70 backdrop-blur-sm text-[11px] font-medium text-white font-mono">
-            {meeting.durationMinutes}:{String(0).padStart(2, "0")}
+          <div className="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[10px] font-mono font-medium text-white/90 shadow-[0_4px_12px_rgba(0,0,0,0.5)] flex items-center gap-1">
+            <Clock className="w-2.5 h-2.5 text-[#00E5FF]" />
+            <span>{meeting.durationMinutes}:00</span>
           </div>
 
           {/* Participant count badge */}
-          <div className="absolute top-2 right-2 px-2 py-1 rounded-md bg-black/50 backdrop-blur-sm text-[11px] font-medium text-white flex items-center gap-1">
-            <Users className="w-3 h-3" />
-            {meeting.participants.length}
+          <div className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[10px] font-medium text-white/90 shadow-[0_4px_12px_rgba(0,0,0,0.5)] flex items-center gap-1">
+            <Users className="w-2.5 h-2.5 text-[#00E5FF]" />
+            <span>{meeting.participants.length}</span>
           </div>
 
           {/* Feedback Toast */}
           {actionFeedback && (
-            <div className="absolute inset-x-2 top-2 z-20 px-2 py-1 rounded-md bg-emerald-950/90 border border-emerald-600/50 text-[10px] font-semibold text-emerald-300 flex items-center justify-center gap-1 shadow-lg animate-in fade-in">
+            <div className="absolute inset-x-2 top-2 z-20 px-2 py-1 rounded-full bg-emerald-950/90 border border-emerald-500/50 text-[10px] font-semibold text-emerald-300 flex items-center justify-center gap-1 shadow-lg shadow-emerald-950/50 animate-in fade-in">
               <Check className="w-3 h-3 text-emerald-400" />
               <span>{actionFeedback}</span>
             </div>
@@ -190,17 +191,16 @@ export default function MeetingCard({ meeting, onDelete }: MeetingCardProps) {
             </button>
           </div>
 
-          <div className="flex items-center gap-3 text-xs text-[#8E92A6]">
+          <div className="flex items-center gap-2.5 text-xs text-[#8E92A6]">
             <span className="flex items-center gap-1">
               <Clock className="w-3 h-3 text-[#555869]" />
               {formattedDate} · {formattedTime}
             </span>
 
             {meeting.actionItems.length > 0 && (
-              <span className="flex items-center gap-1 text-[#8E92A6]">
-                <CheckSquare className="w-3 h-3 text-[#555869]" />
-                {meeting.actionItems.filter((a) => a.isDone).length}/
-                {meeting.actionItems.length}
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold text-emerald-300 bg-gradient-to-r from-emerald-500/15 to-emerald-500/5 border border-emerald-500/30 shadow-[0_0_8px_rgba(16,185,129,0.12)]">
+                <CheckSquare className="w-2.5 h-2.5 text-emerald-400" />
+                <span>{meeting.actionItems.filter((a) => a.isDone).length}/{meeting.actionItems.length}</span>
               </span>
             )}
           </div>
@@ -211,7 +211,7 @@ export default function MeetingCard({ meeting, onDelete }: MeetingCardProps) {
               {meeting.participants.slice(0, 4).map((p, i) => (
                 <div
                   key={i}
-                  className="w-6 h-6 rounded-full border-2 border-[#0A0C12] flex items-center justify-center text-[9px] font-bold text-white"
+                  className="w-6 h-6 rounded-full border-2 border-[#0A0C12] flex items-center justify-center text-[9px] font-bold text-white shadow-sm"
                   style={{ backgroundColor: p.avatarColor }}
                   title={p.name}
                 >
@@ -227,11 +227,11 @@ export default function MeetingCard({ meeting, onDelete }: MeetingCardProps) {
 
             {/* Shared By Badge */}
             {meeting.sharedBy && (
-              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#12141D] border border-[#1E2030] text-[11px] text-[#A6A9B8]">
-                <span className="w-3.5 h-3.5 rounded-full bg-[#00E5FF]/20 text-[#00E5FF] border border-[#00E5FF]/30 flex items-center justify-center text-[7px] font-bold shrink-0">
+              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-gradient-to-r from-purple-500/15 to-indigo-500/10 border border-purple-500/30 text-[10px] text-purple-200 shadow-[0_0_10px_rgba(168,85,247,0.12)]">
+                <span className="w-3.5 h-3.5 rounded-full bg-purple-500/30 text-purple-300 border border-purple-400/40 flex items-center justify-center text-[7px] font-bold shrink-0">
                   {meeting.sharedBy.avatarInitials}
                 </span>
-                <span className="truncate max-w-[130px]">
+                <span className="truncate max-w-[125px]">
                   Shared by <strong className="text-white font-medium">{meeting.sharedBy.name}</strong>
                 </span>
               </div>

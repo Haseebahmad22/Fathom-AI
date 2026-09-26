@@ -175,23 +175,26 @@ export default function AlertsClient({ user }: AlertsClientProps) {
     switch (scope) {
       case "external":
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold text-amber-300 bg-amber-950/40 border border-amber-800/50">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold text-amber-300 bg-gradient-to-r from-amber-500/15 to-amber-500/5 border border-amber-500/30 shadow-[0_0_12px_rgba(245,158,11,0.12)]">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_#fbbf24]" />
             <Globe className="w-3 h-3 text-amber-400" />
-            External Calls
+            <span>External Calls</span>
           </span>
         );
       case "team":
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold text-emerald-300 bg-emerald-950/40 border border-emerald-800/50">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold text-emerald-300 bg-gradient-to-r from-emerald-500/15 to-emerald-500/5 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.12)]">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
             <Users className="w-3 h-3 text-emerald-400" />
-            Team Internal
+            <span>Team Only</span>
           </span>
         );
       default:
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold text-sky-300 bg-sky-950/40 border border-sky-800/50">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold text-sky-300 bg-gradient-to-r from-sky-500/15 to-sky-500/5 border border-sky-500/30 shadow-[0_0_12px_rgba(14,165,233,0.12)]">
+            <span className="w-1.5 h-1.5 rounded-full bg-sky-400 shadow-[0_0_6px_#38bdf8]" />
             <Radio className="w-3 h-3 text-sky-400" />
-            All Calls
+            <span>All Calls</span>
           </span>
         );
     }
@@ -228,9 +231,10 @@ export default function AlertsClient({ user }: AlertsClientProps) {
                 <h1 className="text-2xl font-bold text-white tracking-tight">
                   Alerts & Keywords
                 </h1>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold text-[#00E5FF] bg-[#00E5FF]/10 border border-[#00E5FF]/20 flex items-center gap-1">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold text-[#00E5FF] bg-gradient-to-r from-[#00E5FF]/15 to-[#00E5FF]/5 border border-[#00E5FF]/30 shadow-[0_0_12px_rgba(0,229,255,0.12)] flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] shadow-[0_0_6px_#00E5FF] animate-pulse" />
                   <Bell className="w-3.5 h-3.5" />
-                  {alerts.length} Active
+                  <span>{alerts.length} Active</span>
                 </span>
               </div>
               <p className="text-sm text-[#8E92A6] mt-1">
@@ -302,8 +306,9 @@ export default function AlertsClient({ user }: AlertsClientProps) {
                             <h3 className="text-sm font-semibold text-white truncate">
                               {alert.name || alert.keyword}
                             </h3>
-                            <span className="px-2 py-0.5 rounded-md text-[11px] font-mono font-bold text-[#00E5FF] bg-[#00E5FF]/10 border border-[#00E5FF]/20">
-                              #{alert.keyword}
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-semibold text-[#38EDFF] bg-gradient-to-r from-[#00E5FF]/15 to-[#00E5FF]/5 border border-[#00E5FF]/30 shadow-[0_0_10px_rgba(0,229,255,0.12)]">
+                              <span className="text-[#00E5FF]/60 font-sans text-xs">#</span>
+                              <span>{alert.keyword}</span>
                             </span>
                             {renderScopeBadge(alert.scope)}
                           </div>
@@ -325,14 +330,19 @@ export default function AlertsClient({ user }: AlertsClientProps) {
                       {/* Right: Match Counter Badge + Delete + Chevron */}
                       <div className="flex items-center gap-3 shrink-0">
                         <span
-                          className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${
+                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border transition-all ${
                             resolvedMatches.length > 0
-                              ? "bg-emerald-950/40 text-emerald-300 border-emerald-800/40"
-                              : "bg-[#12141D] text-[#555869] border-[#1E2030]"
+                              ? "bg-gradient-to-r from-emerald-500/15 to-emerald-500/5 text-emerald-300 border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.15)]"
+                              : "bg-[#12141D]/80 text-[#8E92A6] border-white/5"
                           }`}
                         >
-                          {resolvedMatches.length}{" "}
-                          {resolvedMatches.length === 1 ? "Match" : "Matches"}
+                          {resolvedMatches.length > 0 && (
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
+                          )}
+                          <span>
+                            {resolvedMatches.length}{" "}
+                            {resolvedMatches.length === 1 ? "Match" : "Matches"}
+                          </span>
                         </span>
 
                         <button
@@ -402,8 +412,9 @@ export default function AlertsClient({ user }: AlertsClientProps) {
                                   <span className="text-white font-medium">
                                     {line.speakerName}
                                   </span>
-                                  <span className="font-mono text-[#00E5FF] bg-[#00E5FF]/10 px-1.5 py-0.5 rounded text-[10px]">
-                                    @{formatSeconds(line.timestampSeconds)}
+                                  <span className="inline-flex items-center gap-1 font-mono text-[#00E5FF] bg-gradient-to-r from-[#00E5FF]/15 to-[#00E5FF]/5 border border-[#00E5FF]/25 px-2 py-0.5 rounded-full text-[10px] shadow-[0_0_8px_rgba(0,229,255,0.1)]">
+                                    <Clock className="w-2.5 h-2.5 opacity-80" />
+                                    <span>{formatSeconds(line.timestampSeconds)}</span>
                                   </span>
                                 </div>
                               </div>

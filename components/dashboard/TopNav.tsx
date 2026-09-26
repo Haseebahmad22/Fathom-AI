@@ -127,7 +127,7 @@ export default function TopNav({
             >
               <Bell className="w-4 h-4" />
               {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#00E5FF] text-[#050608] font-bold text-[9px] flex items-center justify-center border border-[#0A0C12]">
+                <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-gradient-to-r from-[#00E5FF] to-[#38EDFF] text-[#050608] font-black text-[9px] flex items-center justify-center border border-[#0A0C12] shadow-[0_0_8px_rgba(0,229,255,0.6)] animate-pulse">
                   {unreadCount}
                 </span>
               )}

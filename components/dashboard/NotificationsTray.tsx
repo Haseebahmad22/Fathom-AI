@@ -160,8 +160,8 @@ export default function NotificationsTray({
             Notifications
           </span>
           {unreadCount > 0 && (
-            <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-[#00E5FF] text-[#050608]">
-              {unreadCount}
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-gradient-to-r from-[#00E5FF] to-[#38EDFF] text-[#050608] shadow-[0_0_8px_rgba(0,229,255,0.4)]">
+              {unreadCount} new
             </span>
           )}
         </div>
@@ -187,12 +187,12 @@ export default function NotificationsTray({
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center gap-1 px-4 py-2 border-b border-[#1A1D2E] bg-[#07080D] text-[11px]">
+      <div className="flex items-center gap-1.5 px-4 py-2 border-b border-[#1A1D2E] bg-[#07080D] text-[11px]">
         <button
           onClick={() => setFilter("all")}
-          className={`px-2.5 py-1 rounded-lg font-medium transition-colors cursor-pointer ${
+          className={`px-3 py-0.5 rounded-full font-medium transition-all cursor-pointer ${
             filter === "all"
-              ? "bg-[#12141D] text-white border border-[#1E2030]"
+              ? "bg-[#00E5FF]/15 text-[#38EDFF] border border-[#00E5FF]/30 font-semibold shadow-[0_0_8px_rgba(0,229,255,0.1)]"
               : "text-[#8E92A6] hover:text-white"
           }`}
         >
@@ -200,9 +200,9 @@ export default function NotificationsTray({
         </button>
         <button
           onClick={() => setFilter("unread")}
-          className={`px-2.5 py-1 rounded-lg font-medium transition-colors cursor-pointer ${
+          className={`px-3 py-0.5 rounded-full font-medium transition-all cursor-pointer ${
             filter === "unread"
-              ? "bg-[#12141D] text-white border border-[#1E2030]"
+              ? "bg-[#00E5FF]/15 text-[#38EDFF] border border-[#00E5FF]/30 font-semibold shadow-[0_0_8px_rgba(0,229,255,0.1)]"
               : "text-[#8E92A6] hover:text-white"
           }`}
         >
